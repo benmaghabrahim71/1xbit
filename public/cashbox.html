@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cashbox - HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="dashboard-enhancements.css" />
+  <style>
+    .cashbox-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.5rem;
+    }
+    .cashbox-stack {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .cashbox-card {
+      background: color-mix(in srgb, var(--surface-elevated) 97%, transparent);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 45px color-mix(in srgb, var(--shadow) 16%, transparent);
+      padding: 1.5rem;
+    }
+    .cashbox-card h2,
+    .cashbox-card h3 {
+      margin: 0 0 0.5rem;
+    }
+    .cashbox-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .cashbox-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .cashbox-stat {
+      background: linear-gradient(145deg, color-mix(in srgb, var(--surface-strong) 92%, #020617), color-mix(in srgb, var(--surface) 84%, #020617));
+      color: var(--text);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+      box-shadow: 0 22px 42px color-mix(in srgb, var(--shadow) 18%, transparent);
+    }
+    .cashbox-stat__label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .cashbox-stat__value {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .cashbox-form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .cashbox-form label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .cashbox-form input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      font: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .cashbox-status {
+      display: none;
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .cashbox-status.is-visible {
+      display: block;
+    }
+    .cashbox-status.is-success {
+      background: color-mix(in srgb, var(--success) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--success) 30%, var(--border));
+      color: var(--success);
+    }
+    .cashbox-status.is-error {
+      background: color-mix(in srgb, var(--danger) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger) 30%, var(--border));
+      color: var(--danger);
+    }
+    .cashbox-tip-list {
+      margin: 1rem 0 0;
+      padding-left: 1rem;
+      color: var(--muted);
+      display: grid;
+      gap: 0.6rem;
+    }
+    .cashbox-tip-list li {
+      line-height: 1.5;
+    }
+    .cashbox-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .cashbox-table th,
+    .cashbox-table td {
+      padding: 0.9rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .cashbox-table th {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .cashbox-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .cashbox-amount {
+      font-weight: 800;
+      color: var(--accent-dark);
+    }
+    @media (max-width: 980px) {
+      .cashbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 720px) {
+      .cashbox-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label" data-i18n="available_balance">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html"><svg class="icon-use" width="18" height="18"><use href="#i-layers"/></svg> Dashboard</a>
+        <a href="my-services.html"><svg class="icon-use" width="18" height="18"><use href="#i-server"/></svg> My Services</a>
+        <a href="invoices.html"><svg class="icon-use" width="18" height="18"><use href="#i-cube"/></svg> Invoices</a>
+        <a href="cashbox.html" class="active"><svg class="icon-use" width="18" height="18"><use href="#i-activity"/></svg> Cashbox</a>
+        <a href="tickets.html"><svg class="icon-use" width="18" height="18"><use href="#i-support"/></svg> Support Tickets</a>
+        <a href="profile.html"><svg class="icon-use" width="18" height="18"><use href="#i-users"/></svg> Profile</a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout" style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left"/></svg> Logout
+        </button>
+      </aside>
+
+      <div class="dash-content dash-page-stack">
+        <section class="dash-page-hero">
+          <div class="dash-page-hero__content">
+            <span class="dash-page-eyebrow">Wallet & Credits</span>
+            <header class="panel-header" style="margin:0.9rem 0 0;">
+              <h1>Cashbox</h1>
+              <p>Redeem voucher codes instantly, track balance changes, and keep your account funding flow organized.</p>
+            </header>
+          </div>
+          <div class="dash-page-hero__actions">
+            <a href="invoices.html" class="btn btn--header-outline">View invoices</a>
+          </div>
+        </section>
+
+        <section class="cashbox-stats">
+          <div class="cashbox-stat">
+            <span class="cashbox-stat__label">Current Balance</span>
+            <div class="cashbox-stat__value" id="cashbox-balance">$0.00</div>
+          </div>
+          <div class="cashbox-stat">
+            <span class="cashbox-stat__label">Voucher Credits</span>
+            <div class="cashbox-stat__value" id="cashbox-total-credits">$0.00</div>
+          </div>
+          <div class="cashbox-stat">
+            <span class="cashbox-stat__label">Redeemed Codes</span>
+            <div class="cashbox-stat__value" id="cashbox-redeemed-count">0</div>
+          </div>
+        </section>
+
+        <section class="cashbox-grid">
+          <div class="cashbox-stack">
+            <div class="cashbox-card">
+              <h2>Redeem Voucher</h2>
+              <p>Enter your code exactly as issued. Successful redemption updates your wallet balance in real time.</p>
+              <form id="cashbox-form" class="cashbox-form">
+                <div>
+                  <label for="voucher-code">Voucher Code</label>
+                  <input id="voucher-code" name="code" type="text" maxlength="64" placeholder="H1T-XXXXXXXX" autocomplete="off" required />
+                </div>
+                <div id="cashbox-status" class="cashbox-status" role="status" aria-live="polite"></div>
+                <button id="redeem-button" type="submit" class="btn btn--primary">Redeem Voucher</button>
+              </form>
+            </div>
+
+            <div class="cashbox-card">
+              <h2>Redemption History</h2>
+              <p>Every voucher redemption is logged for auditing and balance traceability.</p>
+              <div style="overflow-x:auto;">
+                <table class="cashbox-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Amount</th>
+                      <th>Redeemed At</th>
+                      <th>Transaction</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cashbox-history-body">
+                    <tr><td colspan="4" style="text-align:center; color:var(--muted);">Loading redemption history...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="cashbox-stack">
+            <div class="cashbox-card">
+              <h3>Security Checks</h3>
+              <p>Voucher redemption is protected by server-side validation.</p>
+              <ul class="cashbox-tip-list">
+                <li>Each voucher checks expiration before balance is updated.</li>
+                <li>Per-user duplicate redemption is blocked automatically.</li>
+                <li>Usage caps are enforced before the credit transaction is written.</li>
+                <li>Every successful redemption creates a matching transaction record.</li>
+              </ul>
+            </div>
+
+            <div class="cashbox-card">
+              <h3>Need Help?</h3>
+              <p>If a voucher does not work, keep the original code and contact support so the audit trail can be reviewed quickly.</p>
+              <div style="margin-top:1rem;">
+                <a href="new-ticket.html" class="btn btn--header-accent">Open Support Ticket</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="app.js"></script>
+  <script src="cashbox.js"></script>
+</body>
+</html>

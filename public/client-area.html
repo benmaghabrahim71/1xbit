@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <meta name="description"
+    content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords"
+    content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description"
+    content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description"
+    content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label" data-i18n="available_balance">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html" class="active"><svg class="icon-use" width="18" height="18">
+            <use href="#i-layers" />
+          </svg> <span data-i18n="dashboard">Dashboard</span></a>
+        <a href="my-services.html"><svg class="icon-use" width="18" height="18">
+            <use href="#i-server" />
+          </svg> <span data-i18n="your_services">My Services</span></a>
+        <a href="invoices.html"><svg class="icon-use" width="18" height="18">
+            <use href="#i-cube" />
+          </svg> <span data-i18n="invoices">Invoices</span></a>
+        <a href="cashbox.html"><svg class="icon-use" width="18" height="18">
+            <use href="#i-activity" />
+          </svg> <span>Cashbox</span></a>
+        <a href="tickets.html"><svg class="icon-use" width="18" height="18">
+            <use href="#i-support" />
+          </svg> <span data-i18n="support_tickets">Support Tickets</span></a>
+        <a href="profile.html"><svg class="icon-use" width="18" height="18">
+            <use href="#i-users" />
+          </svg> <span data-i18n="my_profile">Profile</span></a>
+        <a href="admin.html" id="admin-sidebar-link" style="display:none;"><svg class="icon-use" width="18" height="18">
+            <use href="#i-settings" />
+          </svg> <span>Admin Panel</span></a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout"
+          style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18">
+            <use href="#i-chevron-left" />
+          </svg> <span data-i18n="logout">Logout</span>
+        </button>
+      </aside>
+
+      <div class="dash-content">
+        <header>
+          <h1 id="welcome-msg" data-i18n="welcome">Welcome</h1>
+          <p data-i18n="manage_services_desc">Manage your active services and account details here.</p>
+        </header>
+
+        <section class="dash-widgets">
+          <div class="dash-widget">
+            <h3 data-i18n="active_servers">Active Servers</h3>
+            <p class="stat" id="active-servers-count">0</p>
+          </div>
+          <div class="dash-widget">
+            <h3 data-i18n="unpaid_invoices">Unpaid Invoices</h3>
+            <p class="stat" id="unpaid-invoices-amount">$0.00</p>
+          </div>
+          <div class="dash-widget">
+            <h3 data-i18n="support_tickets">Support Tickets</h3>
+            <p class="stat" id="support-tickets-count">0</p>
+          </div>
+        </section>
+
+        <section>
+          <h2
+            style="font-size:var(--font-size-xl); font-weight:800; margin:0 0 1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border);"
+            data-i18n="active_subscriptions">Active Subscriptions</h2>
+          <div
+            style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:0 20px 45px color-mix(in srgb, var(--shadow) 18%, transparent);">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="service_name_hostname">Service Name & Hostname</th>
+                  <th data-i18n="pricing_cycle">Pricing Cycle</th>
+                  <th data-i18n="next_due">Next Due</th>
+                  <th data-i18n="status">Status</th>
+                  <th data-i18n="actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="active-services-body">
+                <tr>
+                  <td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);"
+                    data-i18n="loading_services">Loading your services...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="game-panel-section" style="display:none;">
+          <div
+            style="display:flex; justify-content:space-between; gap:1rem; align-items:flex-end; margin:0 0 1rem; flex-wrap:wrap;">
+            <div>
+              <h2 style="font-size:var(--font-size-xl); font-weight:800; margin:0;">Game Panel</h2>
+              <p style="margin:0.35rem 0 0; color:var(--muted);">Manage panel access for your game-hosting services.</p>
+            </div>
+            <span id="game-panel-service-badge" class="status-badge status-badge--active" style="display:none;">Game
+              Hosting</span>
+          </div>
+
+          <div
+            style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem; box-shadow:0 20px 45px color-mix(in srgb, var(--shadow) 18%, transparent);">
+            <div id="game-panel-empty" style="color:var(--muted);">Loading game-hosting services...</div>
+
+            <div id="game-panel-content" style="display:none;">
+              <label for="game-panel-service-select"
+                style="display:block; font-weight:700; margin-bottom:0.45rem;">Service</label>
+              <select id="game-panel-service-select"
+                style="width:100%; padding:0.85rem 1rem; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:1rem;"></select>
+
+              <div id="game-panel-service-meta"
+                style="display:grid; gap:0.75rem; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:1rem;">
+                <div style="border:1px solid var(--border); border-radius:var(--radius); padding:1rem;">
+                  <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; font-weight:700;">Panel
+                    URL</div>
+                  <a id="game-panel-url" href="#" target="_blank" rel="noopener"
+                    style="display:inline-block; margin-top:0.4rem; word-break:break-all;">Open panel</a>
+                </div>
+                <div style="border:1px solid var(--border); border-radius:var(--radius); padding:1rem;">
+                  <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; font-weight:700;">Service
+                  </div>
+                  <div id="game-panel-service-name" style="margin-top:0.4rem; font-weight:700;"></div>
+                </div>
+                <div style="border:1px solid var(--border); border-radius:var(--radius); padding:1rem;">
+                  <div style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; font-weight:700;">
+                    Password Setup</div>
+                  <div id="game-panel-password-state" style="margin-top:0.4rem; font-weight:700;"></div>
+                </div>
+              </div>
+
+              <div id="game-panel-message" role="status" aria-live="polite"
+                style="display:none; margin-bottom:1rem; padding:0.85rem 1rem; border-radius:var(--radius);"></div>
+
+              <form id="game-panel-password-form">
+                <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));">
+                  <div>
+                    <label for="game-panel-password" style="display:block; font-weight:700; margin-bottom:0.45rem;">New
+                      Pterodactyl password</label>
+                    <input id="game-panel-password" type="password" autocomplete="new-password" required
+                      style="width:100%; padding:0.85rem 1rem; border:1px solid var(--border); border-radius:var(--radius);" />
+                  </div>
+                  <div>
+                    <label for="game-panel-password-confirm"
+                      style="display:block; font-weight:700; margin-bottom:0.45rem;">Repeat password</label>
+                    <input id="game-panel-password-confirm" type="password" autocomplete="new-password" required
+                      style="width:100%; padding:0.85rem 1rem; border:1px solid var(--border); border-radius:var(--radius);" />
+                  </div>
+                </div>
+                <p style="margin:0.85rem 0 1rem; color:var(--muted); font-size:0.9rem;">Use at least 12 characters,
+                  including uppercase, lowercase, a number, and a symbol.</p>
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                  <button id="game-panel-password-submit" type="submit" class="btn btn--primary">Change Pterodactyl
+                    Password</button>
+                  <a id="game-panel-manage-link" class="btn btn--ghost" href="#">Open Full Game Panel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="client-api.js"></script>
+  <script src="app.js"></script>
+  <script src="ui-improvements.js"></script>
+  <script>
+    let gamePanelServices = [];
+
+    // Authentication Check
+    function checkAuthentication() {
+      const token = localStorage.getItem('authToken');
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (!token) {
+        window.location.href = 'my-account.html';
+        return;
+      }
+      if (user && (user.role === 'admin' || user.role === 'super_admin')) {
+        const adminLink = document.getElementById('admin-sidebar-link');
+        if (adminLink) adminLink.style.display = 'flex';
+      }
+      fetchDashboardData();
+      fetchGamePanelServices();
+    }
+
+    async function fetchDashboardData() {
+      try {
+        const data = await window.Host1TopApi.get('/api/user/dashboard');
+        updateUI(data);
+      } catch (error) {
+        console.error('Dashboard error:', error);
+      }
+    }
+
+    function updateUI(data) {
+      const welcomeText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.welcome_back || 'Welcome back';
+      document.getElementById('welcome-msg').textContent = `${welcomeText}, ${data.user.username}`;
+      document.getElementById('active-servers-count').textContent = data.stats.active_services || 0;
+      document.getElementById('unpaid-invoices-amount').textContent = `$${data.user.unpaid_balance || '0.00'}`;
+      document.getElementById('support-tickets-count').textContent = data.stats.support_tickets || 0;
+
+      const manageText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.manage || 'Manage';
+      const activeText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.active || 'Active';
+      const noServicesText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.no_active_services || 'No active services found.';
+
+      // Update services table
+      const tbody = document.getElementById('active-services-body');
+      if (data.active_subscriptions && data.active_subscriptions.length > 0) {
+        tbody.innerHTML = data.active_subscriptions.map(sub => `
+          <tr>
+            <td>
+              <div style="font-weight:700;">${sub.plan_name}</div>
+              <div style="font-size:0.8rem; color:var(--muted);">${sub.service_uuid || 'N/A'}</div>
+            </td>
+            <td>Monthly</td>
+            <td>${new Date(sub.expires_at).toLocaleDateString()}</td>
+            <td><span class="status-badge status-badge--active">${activeText}</span></td>
+            <td>
+              <a href="${sub.service_type === 'GAME' ? 'game-panel.html' : 'vps-panel.html'}?uuid=${sub.service_uuid}" 
+                 class="btn btn--ghost" 
+                 style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+                 ${manageText}
+              </a>
+            </td>
+          </tr>
+        `).join('');
+      } else {
+        tbody.innerHTML = `<tr><td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);">${noServicesText}</td></tr>`;
+      }
+    }
+
+    function setGamePanelMessage(message, type = 'info') {
+      const element = document.getElementById('game-panel-message');
+      element.style.display = 'block';
+      element.textContent = message;
+      element.style.background = type === 'error' ? '#fef2f2' : '#ecfdf5';
+      element.style.color = type === 'error' ? '#991b1b' : '#166534';
+      element.style.border = `1px solid ${type === 'error' ? '#fecaca' : '#a7f3d0'}`;
+    }
+
+    function renderSelectedGamePanelService() {
+      const select = document.getElementById('game-panel-service-select');
+      const service = gamePanelServices.find((entry) => entry.service_uuid === select.value) || gamePanelServices[0];
+      if (!service) return;
+
+      document.getElementById('game-panel-service-name').textContent = service.service_name || service.hostname || service.service_uuid;
+      const panelUrl = service.pterodactyl_panel_url || 'game-panel.html';
+      const manageLink = `game-panel.html?uuid=${encodeURIComponent(service.service_uuid)}`;
+      const panelLink = document.getElementById('game-panel-url');
+      panelLink.href = panelUrl;
+      panelLink.textContent = panelUrl;
+      document.getElementById('game-panel-manage-link').href = manageLink;
+      document.getElementById('game-panel-password-state').textContent = service.has_pending_password_setup
+        ? 'Temporary password active'
+        : 'Custom password already set';
+      document.getElementById('game-panel-service-badge').style.display = service.service_category === 'game-hosting' ? 'inline-flex' : 'none';
+    }
+
+    async function fetchGamePanelServices() {
+      const section = document.getElementById('game-panel-section');
+      const empty = document.getElementById('game-panel-empty');
+      const content = document.getElementById('game-panel-content');
+      try {
+        const payload = await window.Host1TopApi.get('/api/user/game-panel/services');
+        gamePanelServices = (payload.services || []).filter((service) => service.service_category === 'game-hosting');
+
+        if (!gamePanelServices.length) {
+          section.style.display = 'none';
+          return;
+        }
+
+        section.style.display = 'block';
+        empty.style.display = 'none';
+        content.style.display = 'block';
+
+        const select = document.getElementById('game-panel-service-select');
+        select.innerHTML = gamePanelServices.map((service) => `
+          <option value="${service.service_uuid}">${service.service_name} (${service.service_uuid})</option>
+        `).join('');
+        select.onchange = renderSelectedGamePanelService;
+
+        const params = new URLSearchParams(window.location.search);
+        const preferredService = params.get('service');
+        if (preferredService && gamePanelServices.some((service) => service.service_uuid === preferredService)) {
+          select.value = preferredService;
+        }
+        renderSelectedGamePanelService();
+
+        const setPasswordToken = params.get('setPasswordToken');
+        if (setPasswordToken) {
+          setGamePanelMessage('One-click password setup link detected. Submit the form below to set your own Pterodactyl password.');
+        }
+      } catch (error) {
+        section.style.display = 'block';
+        empty.textContent = error.message || 'Failed to load game-hosting services.';
+      }
+    }
+
+    async function handleGamePanelPasswordSubmit(event) {
+      event.preventDefault();
+      const select = document.getElementById('game-panel-service-select');
+      const serviceUuid = select.value;
+      if (!serviceUuid) return;
+
+      const submitButton = document.getElementById('game-panel-password-submit');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Updating...';
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const payload = await window.Host1TopApi.post(`/api/user/game-panel/${encodeURIComponent(serviceUuid)}/password`, {
+          newPassword: document.getElementById('game-panel-password').value,
+          confirmPassword: document.getElementById('game-panel-password-confirm').value,
+          setupToken: params.get('setPasswordToken') || ''
+        });
+
+        setGamePanelMessage(payload.message || 'Password updated successfully.');
+        document.getElementById('game-panel-password-form').reset();
+        params.delete('setPasswordToken');
+        window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`.replace(/\?$/, ''));
+        await fetchGamePanelServices();
+      } catch (error) {
+        setGamePanelMessage(error.message || 'Failed to update the Pterodactyl password.', 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Change Pterodactyl Password';
+      }
+    }
+
+    document.getElementById('game-panel-password-form').addEventListener('submit', handleGamePanelPasswordSubmit);
+    document.addEventListener('DOMContentLoaded', checkAuthentication);
+  </script>
+  <script src="header-loader.js"></script>
+</body>
+
+</html>

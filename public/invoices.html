@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoices — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="dashboard-enhancements.css" />
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label" data-i18n="available_balance">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html"><svg class="icon-use" width="18" height="18"><use href="#i-layers"/></svg> Dashboard</a>
+        <a href="my-services.html"><svg class="icon-use" width="18" height="18"><use href="#i-server"/></svg> My Services</a>
+        <a href="invoices.html" class="active"><svg class="icon-use" width="18" height="18"><use href="#i-cube"/></svg> Invoices</a>
+        <a href="cashbox.html"><svg class="icon-use" width="18" height="18"><use href="#i-activity"/></svg> Cashbox</a>
+        <a href="tickets.html"><svg class="icon-use" width="18" height="18"><use href="#i-support"/></svg> Support Tickets</a>
+        <a href="profile.html"><svg class="icon-use" width="18" height="18"><use href="#i-users"/></svg> Profile</a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout" style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left"/></svg> Logout
+        </button>
+      </aside>
+      
+      <div class="dash-content dash-page-stack">
+        <section class="dash-page-hero">
+          <div class="dash-page-hero__content">
+            <span class="dash-page-eyebrow">Billing Desk</span>
+            <header class="panel-header" style="margin:0.9rem 0 0;">
+              <h1>Invoices & Billing</h1>
+              <p>Track outstanding payments, recent billing activity, and the plans attached to each invoice from a cleaner billing view.</p>
+            </header>
+          </div>
+          <div class="dash-page-hero__actions">
+            <a href="cashbox.html" class="btn btn--header-outline">Use cashbox</a>
+          </div>
+        </section>
+
+        <section class="dash-page-summary" aria-label="Billing summary">
+          <article class="dash-summary-card dash-summary-card--accent">
+            <span class="dash-summary-card__label">Invoices</span>
+            <div id="invoice-count" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">All billing records on this account</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Outstanding</span>
+            <div id="invoice-outstanding" class="dash-summary-card__value">$0</div>
+            <div class="dash-summary-card__meta">Pending invoices waiting for payment</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Paid</span>
+            <div id="invoice-paid" class="dash-summary-card__value">$0</div>
+            <div class="dash-summary-card__meta">Historical payments already settled</div>
+          </article>
+        </section>
+
+        <section class="dash-table-shell">
+          <div class="dash-table-shell__header">
+            <div>
+              <h2>Invoice History</h2>
+              <p>Review status, total amount, and available actions for each billing event.</p>
+            </div>
+          </div>
+          <div class="data-table-wrap" style="box-shadow:none; border:none; border-radius:0; background:transparent;">
+            <table class="data-table">
+              <thead>
+                <tr><th>Invoice #</th><th>Issued Date</th><th>Plan</th><th>Total</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="invoices-tbody">
+                <tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--muted);">Loading your invoices...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function fetchInvoices() {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        window.location.href = 'my-account.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user/billing', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch billing data');
+
+        const data = await response.json();
+        const tbody = document.getElementById('invoices-tbody');
+        const invoices = Array.isArray(data.invoices) ? data.invoices : [];
+        document.getElementById('invoice-count').textContent = invoices.length;
+        document.getElementById('invoice-outstanding').textContent = `$${invoices.filter(invoice => invoice.status === 'PENDING').reduce((sum, invoice) => sum + Number(invoice.amount || 0), 0).toFixed(2)}`;
+        document.getElementById('invoice-paid').textContent = `$${invoices.filter(invoice => invoice.status === 'PAID').reduce((sum, invoice) => sum + Number(invoice.amount || 0), 0).toFixed(2)}`;
+        
+        if (invoices.length > 0) {
+          tbody.innerHTML = invoices.map(invoice => `
+            <tr>
+              <td><strong>#HT-${invoice.id}</strong></td>
+              <td>${new Date(invoice.created_at).toLocaleDateString()}</td>
+              <td>${invoice.plan_name || 'Service Credit'}</td>
+              <td>$${invoice.amount} USD</td>
+              <td><span class="status-badge status-badge--${invoice.status.toLowerCase()}">${invoice.status}</span></td>
+              <td>
+                ${invoice.status === 'PENDING' ? 
+                  `<a href="pay-invoice.html?id=${invoice.id}" class="btn btn--header-accent" style="padding:0.25rem 0.75rem; font-size:0.75rem;">Pay Now</a>` : 
+                  `<a href="#" class="btn btn--header-outline" style="padding:0.25rem 0.75rem; font-size:0.75rem;">View</a>`
+                }
+              </td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = '<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--muted);">No invoices found.</td></tr>';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('invoice-count').textContent = '--';
+        document.getElementById('invoice-outstanding').textContent = '--';
+        document.getElementById('invoice-paid').textContent = '--';
+        document.getElementById('invoices-tbody').innerHTML = '<tr><td colspan="6" style="padding:2rem; text-align:center; color:#ef4444;">Error loading invoices.</td></tr>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchInvoices);
+  </script>
+  <script src="header-loader.js"></script>
+</body>
+</html>

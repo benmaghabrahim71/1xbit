@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anti-DDoS Protection — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ddos-hero {
+      background: var(--hero-bg);
+      color: #fff;
+      padding: 6rem 0;
+      text-align: center;
+    }
+    .ddos-hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+    }
+    .ddos-hero p {
+      font-size: 1.25rem;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    .ddos-section {
+      padding: 6rem 0;
+    }
+    .ddos-section--dark {
+      background: var(--hero-bg);
+      color: #fff;
+    }
+    .ddos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .ddos-card {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .ddos-section--dark .ddos-card {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .ddos-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    }
+    .ddos-card h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .ddos-card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .ddos-section--dark .ddos-card p {
+      color: rgba(255,255,255,0.7);
+    }
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      color: #000;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .stats-large {
+      font-size: 5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.4) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="ddos-hero">
+      <div class="container">
+        <div class="section-badge" style="background:#fff; color:#000;" data-i18n="antiddos">Anti-DDoS</div>
+        <h1 data-i18n="about_infra">About Our Infrastructure</h1>
+        <p data-i18n="infra_desc">We operate on a high-performance global network powered by PletX, delivering enterprise-grade security and ultra-fast connectivity for all services.</p>
+      </div>
+    </section>
+
+    <!-- Wave Divider -->
+    <div style="background:var(--hero-bg); line-height:0; display:block; margin-bottom:-2px;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:80px;">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <!-- Infrastructure Details -->
+    <section class="ddos-section">
+      <div class="container">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+          <h2 class="section-title" data-i18n="infra_capacity">Our infrastructure is built to handle over 4 Tbps of network capacity, ensuring stability even under extreme traffic conditions or large-scale cyber attacks.</h2>
+        </div>
+
+        <div class="ddos-grid">
+          <div class="ddos-card">
+            <div class="icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h3 data-i18n="why_pletx">Why We Use PletX</h3>
+            <p data-i18n="pletx_desc">PletX is a next-generation Anti-DDoS protection system designed for modern hosting environments. It provides:</p>
+            <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--muted); line-height: 1.8;">
+              <li data-i18n="pletx_f1">Always-on protection against attacks</li>
+              <li data-i18n="pletx_f2">Intelligent traffic filtering</li>
+              <li data-i18n="pletx_f3">Ultra-low latency performance</li>
+              <li data-i18n="pletx_f4">Real-time mitigation without downtime</li>
+            </ul>
+          </div>
+          <div class="ddos-card">
+            <div class="icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 data-i18n="how_pletx_works">How PletX Works</h3>
+            <p data-i18n="pletx_logic">PletX operates directly at the network level, filtering malicious traffic before it ever reaches your server.</p>
+            <p style="margin-top: 1rem;" data-i18n="pletx_focus">Unlike traditional protection systems, PletX focuses on adaptive filtering and efficiency, meaning your services stay online and responsive even during attacks.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dark Section: Network Power -->
+    <section class="ddos-section ddos-section--dark">
+      <div class="container">
+        <div class="ddos-grid" style="align-items: center;">
+          <div>
+            <div class="stats-large">4 Tbps+</div>
+            <h2 class="section-title" style="color:#fff; text-align:left;" data-i18n="network_power">4 Tbps Network Power</h2>
+            <ul style="margin-top: 1.5rem; display: grid; gap: 1rem; color: rgba(255,255,255,0.7);">
+              <li style="display:flex; gap:0.75rem;"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> <span data-i18n="network_f1">Global backbone connectivity</span></li>
+              <li style="display:flex; gap:0.75rem;"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> <span data-i18n="network_f2">Ultra-high bandwidth (4+ Tbps capacity)</span></li>
+              <li style="display:flex; gap:0.75rem;"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> <span data-i18n="network_f3">Enterprise-grade DDoS mitigation</span></li>
+              <li style="display:flex; gap:0.75rem;"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> <span data-i18n="network_f4">Low latency optimized routing</span></li>
+            </ul>
+          </div>
+          <div class="ddos-card" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2);">
+            <p style="font-size: 1.1rem; font-style: italic;" data-i18n="bandwidth_analogy">Think of bandwidth like a highway — 4 Tbps means thousands of lanes, allowing massive amounts of data to flow smoothly without congestion.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Logic -->
+    <section class="ddos-section">
+      <div class="container">
+        <div class="ddos-grid">
+          <div>
+            <h3 data-i18n="routing_filtering">1. Traffic Routing & Filtering</h3>
+            <p data-i18n="routing_desc">All incoming traffic is automatically routed through PletX protection layers. Suspicious or malicious packets are blocked instantly, while legitimate users are allowed through.</p>
+          </div>
+          <div>
+            <h3 data-i18n="smart_detection">2. Smart Protocol Detection</h3>
+            <p data-i18n="detection_desc">PletX analyzes traffic patterns in real time and automatically detects protocols such as:</p>
+            <p style="margin-top: 0.5rem; font-weight: 700; color: #000;" data-i18n="protocols">Game servers (FiveM, Minecraft, SA-MP), Voice services (TeamSpeak), VPN connections (WireGuard, OpenVPN), Remote access (SSH, RDP)</p>
+          </div>
+          <div>
+            <h3 data-i18n="filtering_tech">3. Advanced Filtering Technology</h3>
+            <p data-i18n="filtering_tech_desc">Using technologies like XDP and eBPF, PletX processes traffic at extremely high speed with minimal resource usage, ensuring maximum performance and efficiency.</p>
+          </div>
+          <div>
+            <h3 data-i18n="realtime_monitoring">4. Real-Time Monitoring</h3>
+            <p data-i18n="monitoring_desc">The system continuously monitors incoming & blocked traffic, attack patterns, and bandwidth usage. This allows instant response and automatic mitigation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission / Footer Section -->
+    <section class="ddos-section--dark" style="text-align: center; padding: 8rem 0;">
+      <div class="container">
+        <h2 class="section-title" style="color:#fff;" data-i18n="our_mission">Our Mission</h2>
+        <p style="max-width: 700px; margin: 0 auto 3rem; color: rgba(255,255,255,0.7);" data-i18n="mission_footer">By combining powerful hardware + PletX protection, we provide a hosting environment that is secure, fast, and reliable for any project.</p>
+        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+          <!-- Uptime -->
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--accent); color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <span style="font-weight: 700;" data-i18n="mission_f1">Maximum uptime</span>
+          </div>
+          <!-- Protection -->
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--accent); color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span style="font-weight: 700;" data-i18n="mission_f2">Advanced protection</span>
+          </div>
+          <!-- Deployment -->
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--accent); color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <span style="font-weight: 700;" data-i18n="mission_f3">Fast deployment</span>
+          </div>
+          <!-- Scalable -->
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+            <div style="width: 48px; height: 48px; background: var(--accent); color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3L4 8l8 5 8-5-8-5zM4 13l8 5 8-5M4 18l8 5 8-5"/></svg>
+            </div>
+            <span style="font-weight: 700;" data-i18n="mission_f4">Scalable infrastructure</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="ui-improvements.js"></script>
+</body>
+</html>

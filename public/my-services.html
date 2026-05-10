@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Services — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="dashboard-enhancements.css" />
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label" data-i18n="available_balance">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html"><svg class="icon-use" width="18" height="18"><use href="#i-layers"/></svg> Dashboard</a>
+        <a href="my-services.html" class="active"><svg class="icon-use" width="18" height="18"><use href="#i-server"/></svg> My Services</a>
+        <a href="invoices.html"><svg class="icon-use" width="18" height="18"><use href="#i-cube"/></svg> Invoices</a>
+        <a href="cashbox.html"><svg class="icon-use" width="18" height="18"><use href="#i-activity"/></svg> Cashbox</a>
+        <a href="tickets.html"><svg class="icon-use" width="18" height="18"><use href="#i-support"/></svg> Support Tickets</a>
+        <a href="profile.html"><svg class="icon-use" width="18" height="18"><use href="#i-users"/></svg> Profile</a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout" style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left"/></svg> Logout
+        </button>
+      </aside>
+      
+      <div class="dash-content dash-page-stack">
+        <section class="dash-page-hero">
+          <div class="dash-page-hero__content">
+            <span class="dash-page-eyebrow">Service Hub</span>
+            <header class="panel-header" style="margin:0.9rem 0 0;">
+              <h1>My Services</h1>
+              <p>Manage active hosting, jump into your panel faster, and monitor upcoming renewals from one cleaner workspace.</p>
+            </header>
+          </div>
+          <div class="dash-page-hero__actions">
+            <a href="tickets.html" class="btn btn--header-outline">Need support?</a>
+            <a href="client-area.html" class="btn btn--header-accent">Back to dashboard</a>
+          </div>
+        </section>
+
+        <section class="dash-page-summary" aria-label="Service summary">
+          <article class="dash-summary-card dash-summary-card--accent">
+            <span class="dash-summary-card__label">Total Services</span>
+            <div id="services-total" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">All currently visible subscriptions</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Game Hosting</span>
+            <div id="services-game" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">Direct access to your game panel</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Cloud / VPS</span>
+            <div id="services-cloud" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">Infrastructure and private workloads</div>
+          </article>
+        </section>
+
+        <section class="dash-table-shell">
+          <div class="dash-table-shell__header">
+            <div>
+              <h2>Active Services</h2>
+              <p>Open the right panel quickly and review service metadata without leaving the page.</p>
+            </div>
+            <div class="dash-table-note">Plan, due date, and panel metadata stay visible here.</div>
+          </div>
+          <div class="data-table-wrap" style="box-shadow:none; border:none; border-radius:0; background:transparent;">
+            <table class="data-table">
+              <thead>
+                <tr><th>Service Name & Hostname</th><th>Pricing Cycle</th><th>Next Due</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="services-tbody">
+                <tr><td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);">Loading your services...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="client-api.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function fetchServices() {
+      try {
+        const data = await window.Host1TopApi.get('/api/user/services');
+        const tbody = document.getElementById('services-tbody');
+        const totalNode = document.getElementById('services-total');
+        const gameNode = document.getElementById('services-game');
+        const cloudNode = document.getElementById('services-cloud');
+        
+        if (data.services && data.services.length > 0) {
+          totalNode.textContent = data.services.length;
+          gameNode.textContent = data.services.filter(service => service.service_type === 'GAME').length;
+          cloudNode.textContent = data.services.filter(service => service.service_type !== 'GAME').length;
+          tbody.innerHTML = data.services.map(service => {
+            const status = service.status === 'PENDING' ? 'ACTIVE' : service.status;
+            const gameMeta = service.service_type === 'GAME'
+              ? [service.panel_identifier ? `ID: ${service.panel_identifier}` : null, service.panel_node, service.panel_egg].filter(Boolean).join(' • ')
+              : '';
+            return `
+            <tr>
+              <td>
+                <div style="font-weight:700;">${service.service_name}</div>
+                <div style="font-size:0.8rem; color:var(--muted);">${service.hostname}</div>
+                ${service.service_category === 'game-hosting' ? `<div class="dash-info-chip">Game Panel enabled</div>` : ''}
+                ${gameMeta ? `<div style="font-size:0.75rem; color:var(--muted); margin-top:0.2rem;">${gameMeta}</div>` : ''}
+              </td>
+              <td>${service.pricing_cycle}</td>
+              <td>${service.next_due}</td>
+              <td><span class="status-badge status-badge--${status.toLowerCase()}">${status}</span></td>
+              <td>
+                <a href="${service.service_type === 'GAME' ? 'game-panel.html' : 'vps-panel.html'}?uuid=${service.service_uuid}" 
+                   class="btn btn--header-outline" 
+                   style="padding:0.25rem 0.75rem; font-size:0.75rem;">
+                   Manage
+                </a>
+              </td>
+            </tr>
+          `}).join('');
+        } else {
+          totalNode.textContent = '0';
+          gameNode.textContent = '0';
+          cloudNode.textContent = '0';
+          tbody.innerHTML = '<tr><td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);">No services found.</td></tr>';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('services-total').textContent = '--';
+        document.getElementById('services-game').textContent = '--';
+        document.getElementById('services-cloud').textContent = '--';
+        document.getElementById('services-tbody').innerHTML = `<tr><td colspan="5" style="padding:2rem; text-align:center; color:#ef4444;">${error.message || 'Error loading services.'}</td></tr>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchServices);
+  </script>
+  <script src="header-loader.js"></script>
+</body>
+</html>
