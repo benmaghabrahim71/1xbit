@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Configure your premium VPS or RDP server - HOST1TOP" />
+  <title>Configure Cloud Hosting — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #b8fb3b;
+      --accent-dark: #1f3c00;
+      --border: #e1e7ef;
+      --radius: 2px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      margin: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #555555;
+      color: #fff;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: clamp(4rem, 8vw, 7rem) 0 clamp(5rem, 10vw, 9rem);
+    }
+
+    @media (max-width: 860px) {
+      .hero__inner {
+        padding-bottom: 4rem;
+      }
+    }
+
+    .hero__copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 780px;
+    }
+
+    .hero__eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .hero__title {
+      margin: 0;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .hero__title-accent {
+      display: block;
+      color: var(--accent);
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 1;
+    }
+
+    .hero__subtitle {
+      margin: 1.25rem 0 0;
+      max-width: 640px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+    }
+
+    .order-page {
+      padding-top: 2rem;
+      padding-bottom: 8rem;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Horizontal Resource Row */
+    .resource-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .resource-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: var(--card-bg);
+      color: var(--card-text);
+    }
+
+    .resource-card header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+    }
+
+    .resource-card .val {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .resource-card .unit {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-left: 0.25rem;
+    }
+
+    /* Range Slider */
+    input[type="range"] {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border: 4px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Horizontal Options Bar */
+    .config-bar {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-end;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.04);
+      margin-bottom: 2.5rem;
+    }
+
+    .config-item {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .config-item label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      color: var(--muted, #5c6470);
+    }
+
+    .config-control {
+      width: 100%;
+      height: 48px;
+      padding: 0 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      color: var(--card-text);
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      padding: 0.35rem 0.8rem;
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    /* Legal Section */
+    .legal-checks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .check-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 0.2rem;
+      cursor: pointer;
+    }
+
+    /* Sticky Summary Bar */
+    .summary-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      color: #000000;
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 0;
+      z-index: 1000;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.06);
+    }
+
+    .summary-bar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .summary-bar .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .summary-details {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    .summary-details {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .summary-point {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-point .label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .summary-point .value {
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .price-action {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .total-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .total-price small {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .order-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius);
+      padding: 1rem 2rem;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .order-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .resource-card .price-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #16a34a;
+      margin-top: 0.5rem;
+      text-align: right;
+    }
+
+    .win-notice {
+      display: none;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      border-radius: var(--radius);
+      padding: 0.65rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+    .win-notice.show { display: block; }
+
+    @media (max-width: 850px) {
+      .resource-row { grid-template-columns: 1fr; }
+      .legal-checks { grid-template-columns: 1fr; }
+      .summary-details { display: none; }
+      .order-page { padding-bottom: 8rem; }
+    }
+  </style>
+</head>
+<body data-no-footer="true">
+  <div id="header-root"></div>
+
+  <main class="order-page">
+    <!-- Wave TOP (Grey waves into hero) -->
+    <div style="background:#ffffff; line-height:0; display:block; margin-bottom:-2px;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+        style="display:block; width:100%; height:80px;">
+        <path fill="#555555" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <section class="hero">
+      <div class="hero__inner container">
+        <div class="hero__copy">
+          <p class="hero__eyebrow" id="tier-label">PREMIUM INFRASTRUCTURE</p>
+          <h1 class="hero__title">
+            Configure Your <span class="hero__title-accent">Cloud Instance</span>
+          </h1>
+          <p class="hero__subtitle" id="tier-subtitle">High-performance KVM virtualization with instant deployment and premium network connectivity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wave BOTTOM (White waves into next section) -->
+    <div style="background:#555555; line-height:0; display:block; margin-top:-2px;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+        style="display:block; width:100%; height:80px;">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <div class="container" style="margin-top: 4rem;">
+
+      <!-- Resource Configuration -->
+      <div class="resource-row">
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label">CPU Cores</label>
+            <div><span class="val" id="cpu-val">1</span><span class="unit">Core</span></div>
+          </header>
+          <input type="range" id="cpu-slider" min="1" max="16" value="1" step="1">
+          <div class="price-tag" id="cpu-price-tag">+0.00€</div>
+        </article>
+
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label" id="ram-label">Memory (RAM) — DDR4</label>
+            <div><span class="val" id="ram-val">1</span><span class="unit">GB</span></div>
+          </header>
+          <input type="range" id="ram-slider" min="1" max="128" value="1" step="1">
+          <div class="price-tag" id="ram-price-tag">+0.00€</div>
+        </article>
+
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label">NVMe Storage</label>
+            <div><span class="val" id="ssd-val">10</span><span class="unit">GB</span></div>
+          </header>
+          <input type="range" id="ssd-slider" min="10" max="500" value="10" step="10">
+          <div class="price-tag" id="ssd-price-tag">+0.00€</div>
+          <div class="win-notice" id="win-notice">⚠ Windows requires a minimum of 50 GB storage.</div>
+        </article>
+      </div>
+
+      <!-- Additional Settings Bar -->
+      <div class="config-bar">
+        <div class="config-item">
+          <label>Billing Cycle</label>
+          <select id="cycle-select" class="config-control">
+            <option value="1">Monthly Billing</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label>IP Addresses</label>
+          <select id="ipv4-select" class="config-control">
+            <option value="1">1 Dedicated IPv4 (Included)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label>Primary Location</label>
+          <div class="config-control" style="background: #f1f5f9; cursor: not-allowed;">
+            <span>Netherlands, EU</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal Section -->
+      <div class="legal-checks">
+        <label class="check-item">
+          <input type="checkbox" id="agree-tos">
+          <span>I have read and accept the <a href="../tos.html" style="color:var(--text); font-weight:800">Terms of Service</a> and <a href="../tos.html" style="color:var(--text); font-weight:800">Privacy Policy</a>.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="agree-instant">
+          <span>I request immediate service delivery and acknowledge that the right of withdrawal expires upon contract execution.</span>
+        </label>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sticky Summary Bar -->
+  <aside class="summary-bar">
+    <div class="container">
+      <div class="summary-details">
+        <div class="summary-point">
+          <span class="label">Configuration</span>
+          <span class="value" id="sum-config">1 vCPU / 1GB RAM</span>
+        </div>
+        <div class="summary-point">
+          <span class="label">Storage</span>
+          <span class="value" id="sum-ssd">10GB NVMe</span>
+        </div>
+        <div class="summary-point">
+          <span class="label">Activation</span>
+          <span class="value" style="color: #16a34a">Instant Deployment</span>
+        </div>
+      </div>
+
+      <div class="price-action">
+        <div class="total-price" style="color:#000">€<span id="total-price">0.00</span><small>/mo</small></div>
+        <button class="order-btn" onclick="handleCheckout()">Checkout</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="../header-loader.js"></script>
+  <script>
+    /* ── Tier Configuration ── */
+    const urlParams = new URLSearchParams(window.location.search);
+    const isExtreme = urlParams.get('tier') === 'extreme';
+
+    const TIER = isExtreme ? {
+      label: 'Extreme',
+      ramType: 'DDR5',
+      priceCore: 2.40,
+      priceRamGb: 1.70,
+      priceDisk10Gb: 0.70,
+      maxCores: 16,
+      maxRam: 64,
+      maxDisk: 500,
+      hostsystem: 'nl_ryzen',
+      heroEyebrow: 'EXTREME TIER',
+      heroSubtitle: 'Maximum performance with Ryzen 9 9950X, DDR5 ECC and Gen5 NVMe.'
+    } : {
+      label: 'Budget',
+      ramType: 'DDR4',
+      priceCore: 1.00,
+      priceRamGb: 0.95,
+      priceDisk10Gb: 0.70,
+      maxCores: 16,
+      maxRam: 128,
+      maxDisk: 500,
+      hostsystem: 'nl_ryzen',
+      heroEyebrow: 'BUDGET TIER',
+      heroSubtitle: 'Affordable and reliable cloud hosting with DDR4 and NVMe storage.'
+    };
+
+    /* ── DOM References ── */
+    const sliders = {
+      cpu: document.getElementById('cpu-slider'),
+      ram: document.getElementById('ram-slider'),
+      ssd: document.getElementById('ssd-slider')
+    };
+    const selectors = {
+      ipv4: document.getElementById('ipv4-select'),
+      cycle: document.getElementById('cycle-select')
+    };
+    const displays = {
+      cpu: document.getElementById('cpu-val'),
+      ram: document.getElementById('ram-val'),
+      ssd: document.getElementById('ssd-val'),
+      total: document.getElementById('total-price'),
+      sumConfig: document.getElementById('sum-config'),
+      sumSsd: document.getElementById('sum-ssd'),
+      cpuTag: document.getElementById('cpu-price-tag'),
+      ramTag: document.getElementById('ram-price-tag'),
+      ssdTag: document.getElementById('ssd-price-tag')
+    };
+
+    /* ── Apply tier limits ── */
+    sliders.cpu.max = TIER.maxCores;
+    sliders.ram.max = TIER.maxRam;
+    sliders.ssd.max = TIER.maxDisk;
+    sliders.ssd.min = 10;
+    sliders.ssd.value = 10;
+    sliders.ram.value = 1;
+    sliders.cpu.value = 1;
+
+    document.getElementById('tier-label').textContent = TIER.heroEyebrow;
+    document.getElementById('tier-subtitle').textContent = TIER.heroSubtitle;
+    document.getElementById('ram-label').textContent = `Memory (RAM) — ${TIER.ramType}`;
+
+    /* ── Windows OS detection for 50GB minimum ── */
+    let selectedOsIsWindows = false;
+
+    // Listen for OS selection messages from cart page or detect from pending order
+    function checkWindowsStorageMin() {
+      const ssd = parseInt(sliders.ssd.value);
+      const notice = document.getElementById('win-notice');
+      if (selectedOsIsWindows && ssd < 50) {
+        sliders.ssd.value = 50;
+        notice.classList.add('show');
+        updateConfig();
+        return;
+      }
+      notice.classList.remove('show');
+    }
+
+    /* ── Pricing Calculation ── */
+    function updateConfig() {
+      const cpu = parseInt(sliders.cpu.value);
+      const ram = parseInt(sliders.ram.value);
+      const ssd = parseInt(sliders.ssd.value);
+
+      // Enforce Windows minimum
+      if (selectedOsIsWindows && ssd < 50) {
+        sliders.ssd.value = 50;
+        return updateConfig();
+      }
+
+      displays.cpu.textContent = cpu;
+      displays.ram.textContent = ram;
+      displays.ssd.textContent = ssd;
+      displays.sumConfig.textContent = `${cpu} vCPU / ${ram}GB RAM`;
+      displays.sumSsd.textContent = `${ssd}GB NVMe`;
+
+      // Per-unit pricing
+      const cpuCost = cpu * TIER.priceCore;
+      const ramCost = ram * TIER.priceRamGb;
+      const diskCost = (ssd / 10) * TIER.priceDisk10Gb;
+
+      displays.cpuTag.textContent = `${cpuCost.toFixed(2)}€`;
+      displays.ramTag.textContent = `${ramCost.toFixed(2)}€`;
+      displays.ssdTag.textContent = `${diskCost.toFixed(2)}€`;
+
+      const totalMonthly = cpuCost + ramCost + diskCost;
+      displays.total.textContent = totalMonthly.toFixed(2);
+    }
+
+    Object.values(sliders).forEach(s => s.addEventListener('input', () => {
+      checkWindowsStorageMin();
+      updateConfig();
+    }));
+    Object.values(selectors).forEach(s => s.addEventListener('change', updateConfig));
+
+    /* ── Checkout Handler ── */
+    function handleCheckout() {
+      if (!document.getElementById('agree-tos').checked || !document.getElementById('agree-instant').checked) {
+        alert('Please agree to the Terms and Instant Delivery.');
+        return;
+      }
+
+      const cpu = parseInt(sliders.cpu.value);
+      const ram = parseInt(sliders.ram.value);
+      const ssd = parseInt(sliders.ssd.value);
+
+      const orderData = {
+        plan_id: 0,
+        plan_name: `${TIER.label} Cloud VPS/RDP`,
+        plan_price: parseFloat(displays.total.textContent),
+        plan_type: 'VPS',
+        cpu: cpu * 100,          // Pterodactyl-style for display
+        ryze_cores: cpu,         // Actual Ryze core count
+        memory: ram * 1024,      // MB
+        disk: ssd * 1024,        // MB
+        ryze_disk_gb: ssd,       // Raw GB for Ryze API
+        region: 'Netherlands, EU',
+        billing_cycle: 'Monthly Billing',
+        ipv4_count: 1,
+        tier: TIER.label,
+        ryze_cpu_type: TIER.hostsystem
+      };
+
+      localStorage.setItem('pending_order', JSON.stringify(orderData));
+      window.location.href = '../cart.html?plan=custom';
+    }
+
+    updateConfig();
+  </script>
+  <script src="../app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Control Panel — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ── DASHBOARD LAYOUT OVERRIDES ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    .dash-sidebar {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .dash-sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .dash-sidebar a:hover {
+      background: #f5f5f5;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .dash-sidebar a.active {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .dash-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .vps-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .vps-header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .status-badge--vps {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: #f5f5f5;
+      border: 1px solid var(--border);
+    }
+
+    /* ── WIDGETS ── */
+    .vps-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .vps-stat-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .vps-stat-card h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .vps-stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .vps-stat-card .detail {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── TABS & CONTENT ── */
+    .vps-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── BUTTONS ── */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-vps {
+      flex: 1;
+      padding: 0.85rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .dash-sidebar a:hover svg { transform: translateX(3px); }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin { animation: spin 2s linear infinite; }
+    .icon-inline {
+      width: 14px;
+      height: 14px;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+      stroke: currentColor;
+      stroke-width: 2.5;
+    }
+
+    .btn-vps:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    /* ── CONSOLE ── */
+    .console-box {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #e2e8f0;
+      height: 450px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      border: 1px solid #1e293b;
+    }
+
+    /* ── TABLES ── */
+    .ptero-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .ptero-table th {
+      text-align: left;
+      padding: 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ptero-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .ptero-table tr:last-child td { border-bottom: none; }
+
+    .file-icon { color: var(--muted); margin-right: 0.5rem; }
+    .folder-icon { color: var(--accent); margin-right: 0.5rem; }
+
+    /* ── FILE ACTIONS DROPDOWN ── */
+    .file-actions-wrapper { position: relative; }
+    .file-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      z-index: 100;
+      min-width: 160px;
+      display: none;
+      padding: 0.5rem 0;
+    }
+    .file-menu.active { display: block; }
+    .file-menu-item {
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background 0.2s;
+    }
+    .file-menu-item:hover { background: #f8fafc; color: var(--accent); }
+    .file-menu-item.danger { color: #ef4444; }
+    .file-menu-item.danger:hover { background: #fef2f2; }
+
+    /* ── TOOLBAR & BREADCRUMBS ── */
+    .file-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .file-toolbar .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .file-breadcrumbs {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .file-breadcrumbs span { cursor: pointer; transition: color 0.2s; }
+    .file-breadcrumbs span:hover { color: var(--accent); }
+    .file-breadcrumbs .sep { color: var(--border); font-weight: 400; }
+
+    /* ── EDITOR OVERLAY ── */
+    .editor-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .editor-overlay.active { display: flex; }
+    .editor-container {
+      background: #fff;
+      width: 90%;
+      max-width: 1000px;
+      height: 80%;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .editor-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+    }
+    .editor-body { flex: 1; position: relative; }
+    .editor-textarea {
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      resize: none;
+      background: #0f172a;
+      color: #e2e8f0;
+      outline: none;
+    }
+    .editor-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      background: #f8fafc;
+    }
+
+    /* ── CUSTOM MODALS & TOASTS ── */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+    }
+    .modal-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; }
+    .modal-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5; }
+    .modal-input {
+      width: 100%;
+      padding: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; }
+
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .toast {
+      background: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      animation: slideIn 0.3s ease forwards;
+    }
+    .toast.error { border-left-color: #ef4444; }
+    .toast.success { border-left-color: #10b981; }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .dash-sidebar a:focus-visible,
+    .btn-vps:focus-visible,
+    .btn:focus-visible,
+    .modal-input:focus-visible,
+    .editor-textarea:focus-visible,
+    #console-input:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 640px) {
+      .vps-header,
+      .editor-header,
+      .editor-footer,
+      .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .console-box {
+        height: 320px;
+      }
+
+      .ptero-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      #tab-console > .vps-card > div[style*="display:flex; gap:1rem; margin-top:1rem;"] {
+        flex-direction: column;
+      }
+
+      .toast-container {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+      }
+
+      .toast {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .vps-card,
+      .dash-sidebar,
+      .modal-card {
+        padding: 1rem;
+      }
+
+      .vps-header h1 {
+        font-size: 1.35rem;
+      }
+
+      .file-toolbar .btn,
+      .btn-vps,
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 320px) {
+      body {
+        min-width: 320px;
+      }
+
+      .dashboard-grid {
+        gap: 1rem;
+      }
+
+      .vps-stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .console-box {
+        padding: 1rem;
+        font-size: 0.78rem;
+      }
+
+      .editor-container {
+        width: calc(100% - 1rem);
+        height: calc(100% - 1rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+
+<body class="dashboard-page">
+  <div id="header-root"></div>
+
+  <!-- ── SVG SPRITE SHEET ── -->
+  <svg style="display:none;">
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-play-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6" y2="6"/><line x1="6" y1="18" x2="6" y2="18"/></symbol>
+    <symbol id="i-loader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></symbol>
+  </svg>
+
+  <main class="container dashboard-grid">
+    <aside class="dash-sidebar">
+      <div style="padding: 0 1rem 1rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem;">
+        <div style="font-size:0.7rem; text-transform:uppercase; color:var(--muted); font-weight:800; letter-spacing:0.1em; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+          <svg class="icon-inline" style="width:12px; height:12px;"><use href="#i-server" /></svg>
+          Game Instance
+        </div>
+        <div id="sidebar-hostname" style="font-weight:900; font-size:1rem; word-break:break-all; display:flex; align-items:center; gap:0.5rem;">
+          <svg class="icon-inline spin" style="width:16px; height:16px; color:var(--accent);"><use href="#i-loader" /></svg>
+          Loading...
+        </div>
+      </div>
+
+      <a href="#" class="active" onclick="switchTab('overview')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-layers" /></svg> Overview
+      </a>
+      <a href="#" onclick="switchTab('console')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-terminal" /></svg> Console
+      </a>
+      <a href="#" onclick="switchTab('files')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-folder" /></svg> File Manager
+      </a>
+      <a href="#" onclick="switchTab('databases')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-database" /></svg> Databases
+      </a>
+      <a href="#" onclick="switchTab('backups')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-save" /></svg> Backups
+      </a>
+      <a href="#" onclick="switchTab('network')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-globe" /></svg> Network
+      </a>
+      <a href="#" onclick="switchTab('startup')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-play-circle" /></svg> Startup
+      </a>
+      <a href="#" onclick="switchTab('settings')">
+        <svg class="icon-use" width="18" height="18"><use href="#i-settings" /></svg> Settings
+      </a>
+
+      <div style="flex:1; min-height: 1rem;"></div>
+      <a href="client-area.html" style="border-top:1px solid var(--border); padding-top:1rem; color:var(--muted);">
+        <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left" /></svg> Back to Dashboard
+      </a>
+    </aside>
+
+    <div class="dash-content">
+      <header class="vps-header">
+        <div>
+          <h1 id="game-title">Game Management</h1>
+          <p id="game-subtitle" style="color:var(--muted); margin:0.25rem 0 0;">Fetching server identity...</p>
+        </div>
+        <div id="game-status-badge" class="status-badge--vps" role="status" aria-live="polite">Loading...</div>
+      </header>
+
+      <!-- ── TAB: OVERVIEW ── -->
+      <section id="tab-overview" class="tab-content active">
+        <div class="vps-stats-grid">
+          <div class="vps-stat-card">
+            <h3>CPU Usage</h3>
+            <div class="value" id="stat-cpu">0%</div>
+            <div class="detail" id="stat-cpu-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Memory Usage</h3>
+            <div class="value" id="stat-mem">0MB</div>
+            <div class="detail" id="stat-mem-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Disk Space</h3>
+            <div class="value" id="stat-disk">0MB</div>
+            <div class="detail" id="stat-disk-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Primary Connection</h3>
+            <div class="value" id="stat-ip" style="filter: blur(8px); cursor: pointer; transition: filter 0.3s ease; font-size: 1.1rem; word-break: break-all;" onclick="this.style.filter='none'" title="Click to reveal">---:---</div>
+            <div class="detail" id="stat-port">Click to reveal identity</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Uptime</h3>
+            <div class="value" id="stat-uptime">---</div>
+            <div class="detail" id="stat-status-text">OFFLINE</div>
+          </div>
+        </div>
+
+        <div class="vps-card" style="margin-top: 2rem;">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); padding-bottom:1rem;">Power Management</h2>
+          <div class="btn-group">
+            <button class="btn-vps" style="background:var(--accent); color:#000; border-color:var(--accent);" onclick="power('start')">Start Server</button>
+            <button class="btn-vps" style="background:#e0f2fe; color:#075985; border-color:#7dd3fc;" onclick="power('restart')">Restart</button>
+            <button class="btn-vps" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;" onclick="power('stop')">Stop</button>
+            <button class="btn-vps" style="background:#ef4444; color:#fff; border-color:#ef4444;" onclick="power('kill')">Kill</button>
+          </div>
+        </div>
+
+        <div class="vps-card" style="margin-top: 2rem;">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Real-time CPU Usage</h2>
+          <div style="height:300px;"><canvas id="overviewChart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- ── TAB: CONSOLE ── -->
+      <section id="tab-console" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Live Console</h2>
+          <div class="console-box" id="console-output">
+            <div style="color:var(--muted)">Connecting to instance...</div>
+          </div>
+          <div style="display:flex; gap:1rem; margin-top:1rem;">
+            <input type="text" id="console-input" placeholder="Type a command..." style="flex:1; padding:0.85rem; background:#1e293b; color:#fff; border:1px solid #334155; border-radius:8px; font-family:monospace;" onkeydown="handleConsoleInput(event)" />
+            <button class="btn btn--primary" onclick="handleConsoleInput({key:'Enter'})">Send</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: FILES ── -->
+      <section id="tab-files" class="tab-content">
+        <div class="vps-card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+            <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <h2 style="font-size:1.1rem; font-weight:800; margin:0; text-transform:uppercase; letter-spacing:0.05em;">File Management</h2>
+          </div>
+          <div class="file-toolbar">
+            <button class="btn btn--primary" onclick="triggerNewFile()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              New File
+            </button>
+            <button class="btn btn--header-outline" onclick="triggerCreateFolder()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              Create Directory
+            </button>
+            <button class="btn btn--header-outline" onclick="triggerUpload()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload
+            </button>
+          </div>
+
+          <div class="file-breadcrumbs" id="file-breadcrumbs">
+            <span onclick="loadFiles('/')">root</span>
+          </div>
+
+          <table class="ptero-table">
+            <thead>
+              <tr><th>Name</th><th>Size</th><th>Modified</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="files-tbody">
+              <tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">Loading files...</td></tr>
+            </tbody>
+          </table>
+          <input type="file" id="file-upload-input" style="display:none;" multiple onchange="handleFileUpload(event)" />
+        </div>
+      </section>
+
+      <!-- ── EDITOR MODAL ── -->
+      <div id="editor-overlay" class="editor-overlay">
+        <div class="editor-container">
+          <div class="editor-header">
+            <div>
+              <h2 id="editor-filename" style="font-size:1rem; font-weight:800; margin:0;">Untitled File</h2>
+              <p id="editor-path" style="font-size:0.7rem; color:var(--muted); margin:0;">/root/</p>
+            </div>
+            <button class="btn btn--ghost" style="padding:0.5rem;" onclick="closeEditor()">&times;</button>
+          </div>
+          <div class="editor-body">
+            <textarea id="editor-textarea" class="editor-textarea" spellcheck="false"></textarea>
+          </div>
+          <div class="editor-footer">
+            <button class="btn btn--ghost" onclick="closeEditor()">Cancel</button>
+            <button class="btn btn--primary" onclick="saveFile()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: DATABASES ── -->
+      <section id="tab-databases" class="tab-content">
+        <div class="vps-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              <h2 style="font-size:1.1rem; font-weight:800; margin:0; text-transform:uppercase; letter-spacing:0.05em;">Databases</h2>
+            </div>
+            <button class="btn btn--primary" onclick="createDatabase()">New Database</button>
+          </div>
+          <table class="ptero-table">
+            <thead>
+              <tr><th>Database Name</th><th>Endpoint</th><th>User</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="db-tbody">
+              <tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">No databases found.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: BACKUPS ── -->
+      <section id="tab-backups" class="tab-content">
+        <div class="vps-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h2 style="font-size:1.1rem; font-weight:800; margin:0; text-transform:uppercase; letter-spacing:0.05em;">Backups</h2>
+            </div>
+            <button class="btn btn--primary" onclick="createBackup()">Create Backup</button>
+          </div>
+          <table class="ptero-table">
+            <thead>
+              <tr><th>Name</th><th>Size</th><th>Created</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="backup-tbody">
+              <tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">No backups found.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: NETWORK ── -->
+      <section id="tab-network" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Network Allocations</h2>
+          <table class="ptero-table">
+            <thead>
+              <tr><th>IP Address</th><th>Port</th><th>Primary</th></tr>
+            </thead>
+            <tbody id="network-tbody">
+              <tr><td colspan="3" style="text-align:center; padding:2rem; color:var(--muted);">Loading network data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: STARTUP ── -->
+      <section id="tab-startup" class="tab-content">
+        <div class="vps-card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+            <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            <h2 style="font-size:1.1rem; font-weight:800; margin:0; text-transform:uppercase; letter-spacing:0.05em;">Startup Configuration</h2>
+          </div>
+          <div id="startup-vars-container">
+            <p style="color:var(--muted);">Loading startup variables...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: SETTINGS ── -->
+      <section id="tab-settings" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Server Settings</h2>
+          <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); margin-bottom:1.5rem;">
+            <div style="border:1px solid var(--border); border-radius:var(--radius); padding:1rem;">
+              <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--muted);">Pterodactyl Login</div>
+              <div id="settings-panel-email" style="margin-top:0.5rem; font-weight:700; word-break:break-all;">Loading...</div>
+            </div>
+            <div style="border:1px solid var(--border); border-radius:var(--radius); padding:1rem;">
+              <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--muted);">Panel URL</div>
+              <a id="settings-panel-url" href="#" target="_blank" rel="noopener" style="display:inline-block; margin-top:0.5rem; word-break:break-all;">Open panel</a>
+            </div>
+          </div>
+
+          <div id="settings-message" role="status" aria-live="polite" style="display:none; margin-bottom:1rem; padding:0.85rem 1rem; border-radius:var(--radius);"></div>
+
+          <form id="settings-password-form">
+            <label for="settings-new-password" style="display:block; font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Change Ptero Password</label>
+            <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:1rem;">
+              <input id="settings-new-password" type="password" autocomplete="new-password" placeholder="New password" style="width:100%; padding:0.85rem; border:1px solid var(--border); border-radius:var(--radius);" />
+              <input id="settings-confirm-password" type="password" autocomplete="new-password" placeholder="Repeat password" style="width:100%; padding:0.85rem; border:1px solid var(--border); border-radius:var(--radius);" />
+            </div>
+            <p style="margin:0 0 1rem; color:var(--muted); font-size:0.9rem;">Your panel email stays the same. Use 12+ characters with uppercase, lowercase, a number, and a symbol.</p>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+              <button id="settings-generate-password" type="button" class="btn btn--ghost">Generate Password</button>
+              <button id="settings-submit-password" type="submit" class="btn btn--primary">Update Password</button>
+              <a id="settings-go-to-panel" class="btn btn--ghost" href="#" target="_blank" rel="noopener">Go to Panel</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ── CUSTOM MODAL ROOT ── -->
+  <div id="modal-root" class="modal-backdrop">
+    <div class="modal-card">
+      <h3 id="modal-title" class="modal-title">Confirm Action</h3>
+      <p id="modal-desc" class="modal-desc">Are you sure you want to proceed?</p>
+      <input type="text" id="modal-input" class="modal-input" style="display:none;" />
+      <div class="modal-actions">
+        <button id="modal-cancel" class="btn btn--ghost" style="padding:0.6rem 1.2rem;">Cancel</button>
+        <button id="modal-confirm" class="btn btn--primary" style="padding:0.6rem 1.2rem;">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOAST ROOT ── -->
+  <div id="toast-root" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <div id="footer-root"></div>
+
+  <script src="client-api.js"></script>
+  <script src="header-loader.js"></script>
+  <script src="ui-improvements.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const serverId = urlParams.get('uuid') || urlParams.get('server') || urlParams.get('id');
+    let socket = null;
+    let overviewChart = null;
+    let panelInfo = null;
+    let lastLiveMetrics = null;
+    let statusPollHandle = null;
+    let logFallbackHandle = null;
+    let csrfTokenCache = null;
+
+    // ── UI HELPERS ──
+    function notify(msg, type = 'success') {
+      if (!msg) return;
+      const root = document.getElementById('toast-root');
+      if (!root) return;
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = msg;
+      root.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    function setTableLoading(tbodyId, colSpan, label = 'Loading...') {
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align:center; padding:2rem; color:var(--muted);"><div class="loader" style="margin:0 auto 1rem;"></div>${label}</td></tr>`;
+    }
+
+    function setTableError(tbodyId, colSpan, label = 'Failed to load') {
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align:center; padding:2rem; color:#ef4444;">${label}</td></tr>`;
+    }
+
+    function showModal({ title, desc, inputPlaceholder }) {
+      return new Promise((resolve) => {
+        const root = document.getElementById('modal-root');
+        const input = document.getElementById('modal-input');
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-desc').textContent = desc;
+        
+        if (inputPlaceholder) {
+          input.style.display = 'block';
+          input.placeholder = inputPlaceholder;
+          input.value = '';
+        } else {
+          input.style.display = 'none';
+        }
+
+        const confirmBtn = document.getElementById('modal-confirm');
+        const cancelBtn = document.getElementById('modal-cancel');
+
+        const cleanup = () => {
+          root.classList.remove('active');
+          confirmBtn.onclick = null;
+          cancelBtn.onclick = null;
+        };
+
+        confirmBtn.onclick = () => {
+          const val = inputPlaceholder ? input.value : true;
+          cleanup();
+          resolve(val);
+        };
+        cancelBtn.onclick = () => {
+          cleanup();
+          resolve(null);
+        };
+
+        root.classList.add('active');
+      });
+    }
+
+    function getAuthToken() {
+      return localStorage.getItem('authToken') || '';
+    }
+
+    async function getCsrfToken() {
+      const token = getAuthToken();
+      if (!token) throw new Error('Please sign in to continue.');
+      if (csrfTokenCache) return csrfTokenCache;
+      const response = await fetch('/api/auth/csrf', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json'
+        }
+      });
+      const text = await response.text();
+      const payload = text ? JSON.parse(text) : {};
+      if (!response.ok || !payload.csrfToken) {
+        throw new Error(payload.error || 'Failed to load a security token.');
+      }
+      csrfTokenCache = payload.csrfToken;
+      return csrfTokenCache;
+    }
+
+    async function api(path, method = 'GET', body = null, options = {}) {
+      try {
+        const token = getAuthToken();
+        if (!token) {
+          window.location.href = 'my-account.html';
+          return { error: 'Please sign in to continue.' };
+        }
+
+        const requestHeaders = {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json'
+        };
+
+        const upperMethod = String(method || 'GET').toUpperCase();
+        if (body !== null && body !== undefined) {
+          requestHeaders['Content-Type'] = 'application/json';
+        }
+
+        if (!['GET', 'HEAD', 'OPTIONS'].includes(upperMethod)) {
+          requestHeaders['X-CSRF-Token'] = await getCsrfToken();
+        }
+
+        const response = await fetch(`/api/user/game/${encodeURIComponent(serverId)}/${path}`, {
+          method: upperMethod,
+          headers: requestHeaders,
+          body: body === null || body === undefined ? undefined : JSON.stringify(body),
+          cache: 'no-store'
+        });
+
+        const text = await response.text();
+        let payload = null;
+        try {
+          payload = text ? JSON.parse(text) : null;
+        } catch {
+          payload = text;
+        }
+
+        if (!response.ok) {
+          return {
+            error: (payload && typeof payload === 'object' ? payload.error : null) || `Request failed with status ${response.status}`,
+            details: payload
+          };
+        }
+
+        return payload;
+      } catch (error) {
+        console.error('API Error:', error);
+        return { error: error?.message || 'Request failed', details: error || null };
+      }
+    }
+
+    async function apiOrThrow(path, method = 'GET', body = null, options = {}) {
+      const response = await api(path, method, body, options);
+      if (response && response.error) {
+        throw new Error(response.error);
+      }
+      return response;
+    }
+
+    async function apiWithRetry(path, method = 'GET', body = null, options = {}) {
+      const attempts = options.attempts || 3;
+      let lastError = null;
+      for (let attempt = 1; attempt <= attempts; attempt += 1) {
+        const response = await api(path, method, body, options);
+        if (!response?.error) {
+          return response;
+        }
+        lastError = response.error;
+        if (attempt < attempts) {
+          await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+        }
+      }
+      return { error: lastError || 'Request failed' };
+    }
+
+    function handleUnexpectedError(error, fallbackMessage) {
+      const message = error?.message || fallbackMessage || 'Something went wrong. Please try again.';
+      notify(message, 'error');
+      return message;
+    }
+
+    function formatMegabytes(value) {
+      const numeric = Number(value || 0);
+      if (!Number.isFinite(numeric) || numeric <= 0) return '0 MB';
+      if (numeric >= 1024) return `${(numeric / 1024).toFixed(1)} GB`;
+      return `${numeric.toFixed(0)} MB`;
+    }
+
+    function formatBytes(bytes) {
+      return formatMegabytes(Number(bytes || 0) / 1024 / 1024);
+    }
+
+    function formatUptime(ms) {
+      const totalSeconds = Math.floor(Number(ms || 0) / 1000);
+      if (totalSeconds <= 0) return '---';
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      if (days > 0) return `${days}d ${hours}h`;
+      if (hours > 0) return `${hours}h ${minutes}m`;
+      return `${minutes}m`;
+    }
+
+    function buildServerPath(name) {
+      return `${currentDir === '/' ? '' : currentDir}/${name}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function setSettingsMessage(message, type = 'success') {
+      const element = document.getElementById('settings-message');
+      if (!element) return;
+      element.style.display = 'block';
+      element.textContent = message;
+      element.style.background = type === 'error' ? '#fef2f2' : '#ecfdf5';
+      element.style.color = type === 'error' ? '#991b1b' : '#166534';
+      element.style.border = `1px solid ${type === 'error' ? '#fecaca' : '#a7f3d0'}`;
+    }
+
+    function generateStrongPassword() {
+      const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*()-_=+';
+      const random = new Uint32Array(20);
+      window.crypto.getRandomValues(random);
+      let password = '';
+      random.forEach((value) => {
+        password += alphabet[value % alphabet.length];
+      });
+      return `H1t!${password.slice(0, 16)}9a`;
+    }
+
+    function syncSettingsPanel(info) {
+      const dashboard = info?.dashboard || {};
+      const panelUrl = dashboard.panel_url || 'https://gp.host1top.com';
+      const settingsEmail = document.getElementById('settings-panel-email');
+      const panelLink = document.getElementById('settings-panel-url');
+      const panelButton = document.getElementById('settings-go-to-panel');
+      if (!settingsEmail || !panelLink || !panelButton) return;
+      settingsEmail.textContent = dashboard.login_email || 'Unknown';
+      panelLink.href = panelUrl;
+      panelLink.textContent = panelUrl;
+      panelButton.href = panelUrl;
+    }
+
+    function applyOverviewInfo(info) {
+      panelInfo = info;
+      const attrs = info?.attributes || {};
+      const dashboard = info?.dashboard || {};
+      document.getElementById('sidebar-hostname').textContent = attrs.name || 'Game Server';
+      document.getElementById('game-title').textContent = attrs.name || 'Game Server';
+      document.getElementById('game-subtitle').textContent = [
+        attrs.identifier ? `Identifier: ${attrs.identifier}` : null,
+        attrs.node ? `Node: ${attrs.node}` : null,
+        attrs.egg_name ? `Egg: ${attrs.egg_name}` : null
+      ].filter(Boolean).join(' • ') || 'Panel synchronization active';
+
+      document.getElementById('stat-cpu-detail').textContent = `${attrs.limits?.cpu || 0}% Limit`;
+      document.getElementById('stat-mem-detail').textContent = `${formatMegabytes(attrs.limits?.memory || 0)} Limit`;
+      document.getElementById('stat-disk-detail').textContent = `${formatMegabytes(attrs.limits?.disk || 0)} Limit`;
+
+      const primaryConnection = dashboard.primary_connection || null;
+      document.getElementById('stat-ip').textContent = primaryConnection?.display || 'No allocation';
+      document.getElementById('stat-port').textContent = primaryConnection
+        ? `Primary allocation • Port ${primaryConnection.port}`
+        : 'No primary allocation available';
+
+      syncSettingsPanel(info);
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.dash-sidebar a').forEach(a => a.classList.remove('active'));
+      
+      const targetTab = document.getElementById('tab-' + tabId);
+      if (targetTab) targetTab.classList.add('active');
+      
+      const targetLink = Array.from(document.querySelectorAll('.dash-sidebar a')).find(a => a.getAttribute('onclick')?.includes(`'${tabId}'`));
+      if (targetLink) targetLink.classList.add('active');
+
+      if (tabId === 'files') loadFiles();
+      if (tabId === 'databases') loadDatabases();
+      if (tabId === 'backups') loadBackups();
+      if (tabId === 'network') loadNetwork();
+      if (tabId === 'startup') loadStartup();
+      if (tabId === 'settings') loadSettings();
+    }
+
+    async function loadOverview() {
+      if (!serverId) {
+        document.getElementById('sidebar-hostname').textContent = 'Invalid ID';
+        document.getElementById('game-title').textContent = 'Invalid Service';
+        document.getElementById('game-subtitle').textContent = 'Missing server uuid in URL (?uuid=...)';
+        return;
+      }
+      document.getElementById('sidebar-hostname').textContent = 'Loading...';
+      document.getElementById('game-title').textContent = 'Loading...';
+      document.getElementById('game-subtitle').textContent = `Syncing ${serverId}...`;
+      const res = await apiWithRetry('info', 'GET', null, { attempts: 3, timeoutMs: 15000 });
+      if (res.error) {
+        document.getElementById('sidebar-hostname').textContent = 'Error';
+        document.getElementById('game-title').textContent = 'Connection Error';
+        document.getElementById('game-subtitle').textContent = `Failed to sync with node: ${res.error}`;
+        notify(`Load failed: ${res.error}`, 'error');
+        return;
+      }
+      if (res.attributes) {
+        applyOverviewInfo(res);
+        initOverviewChart();
+        await loadStatus();
+        return;
+      }
+      document.getElementById('sidebar-hostname').textContent = 'Unavailable';
+      document.getElementById('game-title').textContent = 'Server Information Unavailable';
+      document.getElementById('game-subtitle').textContent = 'The backend returned an unexpected response shape.';
+    }
+
+    async function loadStatus() {
+      const res = await apiWithRetry('resources', 'GET', null, { attempts: 3, timeoutMs: 15000 });
+      if (res.error) {
+        document.getElementById('stat-status-text').textContent = 'LIVE SYNC FAILED';
+        return;
+      }
+      if (res.attributes) {
+        const d = res.attributes;
+        const resources = d.resources || {};
+        const status = d.current_state || 'offline';
+        const isRunning = status === 'running';
+        const badge = document.getElementById('game-status-badge');
+        badge.textContent = status.toUpperCase();
+        badge.style.background = isRunning ? '#dcfce7' : '#fee2e2';
+        badge.style.color = isRunning ? '#166534' : '#991b1b';
+
+        document.getElementById('stat-status-text').textContent = res.live
+          ? status.toUpperCase()
+          : `${status.toUpperCase()} • LIVE SYNC DEGRADED`;
+
+        const cpuValue = Number(resources.cpu_absolute || lastLiveMetrics?.cpu_absolute || 0);
+        const memoryBytes = Number(resources.memory_bytes || lastLiveMetrics?.memory_bytes || 0);
+        const diskBytes = Number(resources.disk_bytes || lastLiveMetrics?.disk_bytes || 0);
+        const uptime = Number(resources.uptime || lastLiveMetrics?.uptime || 0);
+
+        document.getElementById('stat-cpu').textContent = `${cpuValue.toFixed(1)}%`;
+        document.getElementById('stat-mem').textContent = formatBytes(memoryBytes);
+        document.getElementById('stat-disk').textContent = formatBytes(diskBytes);
+        document.getElementById('stat-uptime').textContent = formatUptime(uptime);
+
+        if (res.live) {
+          lastLiveMetrics = {
+            cpu_absolute: cpuValue,
+            memory_bytes: memoryBytes,
+            disk_bytes: diskBytes,
+            uptime
+          };
+        } else if (res.error?.message) {
+          document.getElementById('game-subtitle').textContent = `Live node sync degraded: ${res.error.message}`;
+        }
+
+        if (overviewChart && isRunning && res.live) {
+          const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          if (overviewChart.data.labels.length > 20) overviewChart.data.labels.shift();
+          overviewChart.data.labels.push(now);
+          overviewChart.data.datasets[0].data.push(cpuValue);
+          if (overviewChart.data.datasets[0].data.length > 20) overviewChart.data.datasets[0].data.shift();
+          overviewChart.update('none');
+        }
+      }
+    }
+
+    function initOverviewChart() {
+      if (overviewChart) return;
+      if (typeof Chart === 'undefined') {
+        document.getElementById('game-subtitle').textContent = 'Chart library unavailable. Live metrics continue without the graph.';
+        return;
+      }
+      const ctx = document.getElementById('overviewChart').getContext('2d');
+      if (!ctx) return;
+      overviewChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'CPU %', data: [], borderColor: '#2563eb', backgroundColor: '#2563eb15', fill: true, tension: 0.4, pointRadius: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+      });
+    }
+
+    let currentDir = '/';
+
+    async function loadFiles(dir = '/') {
+      currentDir = dir;
+      updateBreadcrumbs();
+      const tbody = document.getElementById('files-tbody');
+      if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);"><div class="loader" style="margin:0 auto 1rem;"></div>Loading files...</td></tr>';
+      }
+      const res = await api(`files/list?directory=${encodeURIComponent(dir)}`);
+      if (res.error) {
+        setTableError('files-tbody', 4, `Failed to load files: ${res.error}`);
+        return;
+      }
+      if (res.data) {
+        tbody.innerHTML = res.data.map(f => {
+          const attr = f.attributes;
+          const isFile = attr.is_file;
+          const name = attr.name;
+          const fullPath = `${dir === '/' ? '' : dir}/${name}`;
+          const safeName = JSON.stringify(name);
+          const safeFullPath = JSON.stringify(fullPath);
+          
+          return `
+          <tr>
+            <td style="cursor: ${!isFile ? 'pointer' : 'default'};" onclick="${!isFile ? `loadFiles(${safeFullPath})` : ''}">
+              <span class="${isFile ? 'file-icon' : 'folder-icon'}">${isFile ? '📄' : '📁'}</span>
+              ${escapeHtml(name)}
+            </td>
+            <td>${isFile ? (attr.size / 1024).toFixed(1) + ' KB' : '--'}</td>
+            <td>${new Date(attr.modified_at).toLocaleString()}</td>
+            <td>
+              <div class="file-actions-wrapper">
+                <button class="btn btn--ghost" style="padding:0.25rem 0.5rem; font-size:0.7rem;" onclick="toggleFileMenu(event, ${safeName})">Manage</button>
+                <div class="file-menu" id="menu-${encodeURIComponent(name)}">
+                  ${isFile ? `<div class="file-menu-item" onclick="editFile(${safeName})">Edit</div>` : ''}
+                  <div class="file-menu-item" onclick="renameFile(${safeName})">Rename</div>
+                  <div class="file-menu-item" onclick="copyFile(${safeName})">Copy</div>
+                  <div class="file-menu-item" onclick="moveFile(${safeName})">Move</div>
+                  <div class="file-menu-item" onclick="downloadFile(${safeName})">Download</div>
+                  <div class="file-menu-item" onclick="archiveFile(${safeName})">Archive</div>
+                  <div class="file-menu-item" onclick="unarchiveFile(${safeName})">Unzip</div>
+                  <div class="file-menu-item" onclick="chmodFile(${safeName})">Permissions</div>
+                  <div class="file-menu-item danger" onclick="deleteFile(${safeName})">Delete</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `; }).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">No files found.</td></tr>';
+      }
+    }
+
+    function updateBreadcrumbs() {
+      const bc = document.getElementById('file-breadcrumbs');
+      const parts = currentDir.split('/').filter(p => p);
+      let html = '<span onclick="loadFiles(\'/\')">root</span>';
+      let path = '';
+      parts.forEach(p => {
+        path += '/' + p;
+        html += `<span class="sep">/</span><span onclick="loadFiles('${path}')">${p}</span>`;
+      });
+      bc.innerHTML = html;
+    }
+
+    function toggleFileMenu(event, name) {
+      event.stopPropagation();
+      const menu = document.getElementById(`menu-${encodeURIComponent(name)}`);
+      const wasActive = menu.classList.contains('active');
+      document.querySelectorAll('.file-menu').forEach(m => m.classList.remove('active'));
+      if (!wasActive) menu.classList.add('active');
+    }
+
+    document.addEventListener('click', () => document.querySelectorAll('.file-menu').forEach(m => m.classList.remove('active')));
+
+    async function renameFile(name) {
+      const newName = await showModal({ title: 'Rename File', desc: `Enter new name for ${name}:`, inputPlaceholder: name });
+      if (newName) {
+        try {
+          await apiOrThrow('files/rename', 'POST', { root: currentDir, files: [{ from: name, to: newName }] });
+          notify('Item renamed');
+          loadFiles(currentDir);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to rename the selected item.');
+        }
+      }
+    }
+
+    async function copyFile(name) {
+      try {
+        await apiOrThrow('files/copy', 'POST', { location: buildServerPath(name) });
+        notify('File copied successfully');
+        loadFiles(currentDir);
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to copy the selected item.');
+      }
+    }
+
+    async function deleteFile(name) {
+      const ok = await showModal({ title: 'Delete Item', desc: `Are you absolutely sure you want to delete ${name}? This cannot be undone.` });
+      if (ok) {
+        try {
+          await apiOrThrow('files/delete', 'POST', { root: currentDir, files: [name] });
+          notify('Item deleted');
+          loadFiles(currentDir);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to delete the selected item.');
+        }
+      }
+    }
+
+    async function chmodFile(name) {
+      const mode = await showModal({ title: 'Set Permissions', desc: `Enter octal permissions for ${name}:`, inputPlaceholder: '644' });
+      if (mode) {
+        try {
+          await apiOrThrow('files/chmod', 'POST', { root: currentDir, files: [{ file: name, mode }] });
+          notify('Permissions updated');
+          loadFiles(currentDir);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to update file permissions.');
+        }
+      }
+    }
+
+    async function unarchiveFile(name) {
+      try {
+        await apiOrThrow('files/decompress', 'POST', { root: currentDir, file: name });
+        notify('Unzipped successfully');
+        loadFiles(currentDir);
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to extract the selected archive.');
+      }
+    }
+
+    async function archiveFile(name) {
+      try {
+        await apiOrThrow('files/compress', 'POST', { root: currentDir, files: [name] });
+        notify('Archive created');
+        loadFiles(currentDir);
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to create an archive for the selected item.');
+      }
+    }
+
+    async function downloadFile(name) {
+      try {
+        const payload = await apiOrThrow(`files/download?file=${encodeURIComponent(buildServerPath(name))}`);
+        const url = payload?.attributes?.url || payload?.url;
+        if (!url) throw new Error('Download URL was not returned by the panel.');
+        window.open(url, '_blank', 'noopener');
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to generate a download link.');
+      }
+    }
+
+    async function moveFile(name) {
+      const destination = await showModal({
+        title: 'Move Item',
+        desc: `Enter the new path for ${name}. Example: subfolder/${name}`,
+        inputPlaceholder: name
+      });
+      if (destination) {
+        try {
+          await apiOrThrow('files/rename', 'POST', { root: currentDir, files: [{ from: name, to: destination }] });
+          notify('Item moved');
+          loadFiles(currentDir);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to move the selected item.');
+        }
+      }
+    }
+
+    async function editFile(name) {
+      const fullPath = (currentDir === '/' ? '' : currentDir) + '/' + name;
+      const res = await api(`files/contents?file=${encodeURIComponent(fullPath)}`);
+      document.getElementById('editor-filename').textContent = name;
+      document.getElementById('editor-path').textContent = fullPath;
+      document.getElementById('editor-textarea').value = typeof res === 'string' ? res : JSON.stringify(res, null, 2);
+      document.getElementById('editor-overlay').classList.add('active');
+    }
+
+    function closeEditor() { document.getElementById('editor-overlay').classList.remove('active'); }
+
+    async function saveFile() {
+      const name = document.getElementById('editor-filename').textContent;
+      const path = document.getElementById('editor-path').textContent;
+      const content = document.getElementById('editor-textarea').value;
+      try {
+        await apiOrThrow(`files/write?file=${encodeURIComponent(path)}`, 'POST', { content });
+        notify('File saved successfully');
+        closeEditor();
+        loadFiles(currentDir);
+      } catch (error) {
+        handleUnexpectedError(error, `Unable to save ${name}.`);
+      }
+    }
+
+    async function triggerNewFile() {
+      const name = await showModal({ title: 'New File', desc: 'Enter the name of the new file:', inputPlaceholder: 'config.json' });
+      if (name) {
+        const fullPath = (currentDir === '/' ? '' : currentDir) + '/' + name;
+        try {
+          await apiOrThrow(`files/write?file=${encodeURIComponent(fullPath)}`, 'POST', { content: '' });
+          notify('File created');
+          loadFiles(currentDir);
+          editFile(name);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to create a new file.');
+        }
+      }
+    }
+
+    async function triggerCreateFolder() {
+      const name = await showModal({ title: 'New Directory', desc: 'Enter folder name:', inputPlaceholder: 'my_folder' });
+      if (name) {
+        try {
+          await apiOrThrow('files/create-folder', 'POST', { root: currentDir, name });
+          notify('Directory created');
+          loadFiles(currentDir);
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to create a new directory.');
+        }
+      }
+    }
+
+    function triggerUpload() { document.getElementById('file-upload-input').click(); }
+
+    async function handleFileUpload(e) {
+      const files = e.target.files;
+      if (!files.length) return;
+      try {
+        const uploadInfo = await apiOrThrow('files/upload');
+        if (uploadInfo.attributes?.url) {
+          const url = uploadInfo.attributes.url;
+          for (let f of files) {
+            const formData = new FormData();
+            formData.append('files', f);
+            await fetch(`${url}&directory=${encodeURIComponent(currentDir)}`, { method: 'POST', body: formData });
+          }
+          notify('Upload complete');
+          loadFiles(currentDir);
+        }
+      } catch (err) { handleUnexpectedError(err, 'Upload failed.'); }
+      e.target.value = '';
+    }
+
+    async function loadDatabases() {
+      setTableLoading('db-tbody', 4, 'Loading databases...');
+      const res = await api('databases');
+      const tbody = document.getElementById('db-tbody');
+      if (res.error) {
+        setTableError('db-tbody', 4, `Failed to load databases: ${res.error}`);
+        return;
+      }
+      if (res.data && res.data.length > 0) {
+        tbody.innerHTML = res.data.map(db => `
+          <tr>
+            <td><strong>${escapeHtml(db.attributes.name)}</strong></td>
+            <td>${escapeHtml(db.attributes.host.address)}:${db.attributes.host.port}</td>
+            <td>${escapeHtml(db.attributes.username)}</td>
+            <td>
+              <button class="btn btn--ghost" style="color:#ef4444;" onclick="deleteDatabase('${db.attributes.id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">No databases found.</td></tr>';
+      }
+    }
+
+    async function createDatabase() {
+      const name = await showModal({ title: 'New Database', desc: 'Enter the name for your new database:', inputPlaceholder: 'db_name' });
+      if (name) {
+        try {
+          const payload = await apiOrThrow('databases', 'POST', { database: name, remote: '%' });
+          const password = payload?.attributes?.password;
+          notify(password ? `Database created. Password: ${password}` : 'Database created');
+          loadDatabases();
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to create the database.');
+        }
+      }
+    }
+
+    async function deleteDatabase(id) {
+      const ok = await showModal({ title: 'Delete Database', desc: 'Are you sure? All data in this database will be permanently lost.' });
+      if (ok) {
+        try {
+          await apiOrThrow(`databases/${id}`, 'DELETE');
+          notify('Database deleted');
+          loadDatabases();
+        } catch (error) {
+          handleUnexpectedError(error, 'Unable to delete the database.');
+        }
+      }
+    }
+
+    async function loadBackups() {
+      setTableLoading('backup-tbody', 4, 'Loading backups...');
+      const res = await api('backups');
+      const tbody = document.getElementById('backup-tbody');
+      if (res.error) {
+        setTableError('backup-tbody', 4, `Failed to load backups: ${res.error}`);
+        return;
+      }
+      if (res.data) {
+        tbody.innerHTML = res.data.length ? res.data.map(b => `
+          <tr>
+            <td>${escapeHtml(b.attributes.name)}</td>
+            <td>${(b.attributes.bytes / 1024 / 1024).toFixed(1)} MB</td>
+            <td>${new Date(b.attributes.created_at).toLocaleString()}</td>
+            <td style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="btn btn--ghost" onclick="downloadBackup('${b.attributes.uuid}')">Download</button>
+              <button class="btn btn--ghost" style="color:#ef4444;" onclick="deleteBackup('${b.attributes.uuid}')">Delete</button>
+            </td>
+          </tr>
+        `).join('') : '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--muted);">No backups found.</td></tr>';
+      }
+    }
+
+    async function createBackup() {
+      const name = await showModal({ title: 'Create Backup', desc: 'Enter an optional backup name:', inputPlaceholder: 'manual-backup' });
+      if (name === null) return;
+      try {
+        const payload = {};
+        if (name) payload.name = name;
+        await apiOrThrow('backups', 'POST', payload);
+        notify('Backup creation requested');
+        loadBackups();
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to create the backup.');
+      }
+    }
+
+    async function downloadBackup(backupId) {
+      try {
+        const payload = await apiOrThrow(`backups/${encodeURIComponent(backupId)}/download`);
+        const url = payload?.attributes?.url || payload?.url;
+        if (!url) throw new Error('Backup download URL was not returned by the panel.');
+        window.open(url, '_blank', 'noopener');
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to download the backup.');
+      }
+    }
+
+    async function deleteBackup(backupId) {
+      const ok = await showModal({ title: 'Delete Backup', desc: 'Are you sure you want to delete this backup permanently?' });
+      if (!ok) return;
+      try {
+        await apiOrThrow(`backups/${encodeURIComponent(backupId)}`, 'DELETE');
+        notify('Backup deleted');
+        loadBackups();
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to delete the backup.');
+      }
+    }
+
+    async function loadNetwork() {
+      setTableLoading('network-tbody', 3, 'Loading network allocations...');
+      const res = await api('network/allocations');
+      const tbody = document.getElementById('network-tbody');
+      if (res.error) {
+        setTableError('network-tbody', 3, `Failed to load network: ${res.error}`);
+        return;
+      }
+      if (res.data) {
+        tbody.innerHTML = res.data.length ? res.data.map(n => `
+          <tr>
+            <td>${n.attributes.ip}</td>
+            <td>${n.attributes.port}</td>
+            <td>${n.attributes.is_default ? 'YES' : '--'}</td>
+          </tr>
+        `).join('') : '<tr><td colspan="3" style="text-align:center; padding:2rem; color:var(--muted);">No allocations found.</td></tr>';
+      }
+    }
+
+    async function loadStartup() {
+      const container = document.getElementById('startup-vars-container');
+      if (container) {
+        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--muted);"><div class="loader" style="margin:0 auto 1rem;"></div>Loading startup variables...</div>';
+      }
+      const res = await api('startup');
+      if (res.error) {
+        if (container) container.innerHTML = `<div style="text-align:center; padding:2rem; color:#ef4444;">Failed to load startup: ${res.error}</div>`;
+        return;
+      }
+      if (res.meta && res.meta.variables) {
+        container.innerHTML = res.meta.variables.map(v => `
+          <div style="margin-bottom:1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase;">${v.name}</label>
+            <input type="text" value="${v.server_value}" readonly style="width:100%; padding:0.5rem; border:1px solid var(--border); border-radius:4px; background:#f1f5f9;" />
+          </div>
+        `).join('');
+      } else {
+        if (container) container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--muted);">No startup variables found.</div>';
+      }
+    }
+
+    async function power(signal) {
+      try {
+        await apiOrThrow('power', 'POST', { signal });
+        notify(`Power command sent: ${signal}`);
+        setTimeout(loadStatus, 1000);
+      } catch (error) {
+        handleUnexpectedError(error, 'Unable to send the power command.');
+      }
+    }
+
+    function handleConsoleInput(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('console-input');
+        const cmd = input.value.trim();
+        if (!cmd) return;
+        input.value = '';
+        logToConsole(`> ${cmd}`, '#fff');
+        api('command', 'POST', { command: cmd }).then((response) => {
+          if (response?.error) {
+            notify(response.error, 'error');
+          }
+        });
+      }
+    }
+
+    function logToConsole(text, color = '#e2e8f0') {
+      const output = document.getElementById('console-output');
+      const div = document.createElement('div');
+      div.style.color = color;
+      div.textContent = text;
+      output.appendChild(div);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    async function loadLogsFallback() {
+      const res = await apiWithRetry('logs', 'GET', null, { attempts: 2, timeoutMs: 15000 });
+      if (res.success && res.logs) {
+        const output = document.getElementById('console-output');
+        output.innerHTML = ''; // Clear "Connecting..."
+        res.logs.split('\n').forEach(l => logToConsole(l));
+      }
+    }
+
+    async function initWebSocket() {
+      try {
+        const res = await apiWithRetry('websocket', 'GET', null, { attempts: 3, timeoutMs: 15000 });
+        if (res.data) {
+          const { token, socket: url } = res.data;
+          if (!token || !url) {
+            throw new Error('Websocket credentials are incomplete');
+          }
+          socket = new WebSocket(url);
+          socket.onopen = () => socket.send(JSON.stringify({ event: "auth", args: [token] }));
+          socket.onmessage = (e) => {
+            const d = JSON.parse(e.data);
+            if (d.event === "console output") d.args.forEach(l => logToConsole(l));
+            if (d.event === "status") logToConsole(`[STATUS] Instance is now ${d.args[0].toUpperCase()}`, '#10b981');
+          };
+          socket.onerror = () => {
+            notify('Live console connection is unavailable. Falling back to log snapshots.', 'error');
+            if (!logFallbackHandle) {
+              logFallbackHandle = setInterval(loadLogsFallback, 20000);
+            }
+          };
+        }
+      } catch (e) {
+        notify('Live console connection failed. Falling back to log snapshots.', 'error');
+        if (!logFallbackHandle) {
+          logFallbackHandle = setInterval(loadLogsFallback, 20000);
+        }
+      }
+    }
+
+    async function handlePasswordUpdate(event) {
+      event.preventDefault();
+      const submitButton = document.getElementById('settings-submit-password');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Updating...';
+      try {
+        const token = getAuthToken();
+        const csrfToken = await getCsrfToken();
+        const response = await fetch(`/api/user/game-panel/${encodeURIComponent(serverId)}/password`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-CSRF-Token': csrfToken,
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({
+            newPassword: document.getElementById('settings-new-password').value,
+            confirmPassword: document.getElementById('settings-confirm-password').value
+          }),
+          cache: 'no-store'
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || 'Unable to update the Pterodactyl password.');
+        }
+        setSettingsMessage(payload.message || 'Pterodactyl password updated successfully.');
+        notify(payload.message || 'Pterodactyl password updated successfully.');
+        document.getElementById('settings-password-form').reset();
+      } catch (error) {
+        setSettingsMessage(error.message || 'Unable to update the Pterodactyl password.', 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Update Password';
+      }
+    }
+
+    function loadSettings() {
+      if (panelInfo) {
+        syncSettingsPanel(panelInfo);
+      }
+    }
+
+    window.addEventListener('error', () => {
+      notify('A page error occurred. Please refresh if the issue persists.', 'error');
+    });
+
+    window.addEventListener('unhandledrejection', (event) => {
+      event.preventDefault();
+      handleUnexpectedError(event.reason, 'An unexpected request failed.');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!serverId) {
+        notify('Missing server uuid (?uuid=...)', 'error');
+        return;
+      }
+      const passwordForm = document.getElementById('settings-password-form');
+      const generateButton = document.getElementById('settings-generate-password');
+      if (passwordForm) {
+        passwordForm.addEventListener('submit', handlePasswordUpdate);
+      }
+      if (generateButton) {
+        generateButton.addEventListener('click', () => {
+        const generated = generateStrongPassword();
+        document.getElementById('settings-new-password').value = generated;
+        document.getElementById('settings-confirm-password').value = generated;
+        setSettingsMessage('A secure password was generated. Submit to sync it with Pterodactyl.');
+        });
+      }
+      loadOverview();
+      loadLogsFallback();
+      initWebSocket();
+      statusPollHandle = setInterval(loadStatus, 15000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+services:
+  mock-pterodactyl:
+    image: node:20-alpine
+    working_dir: /app
+    command: ["node", "mock-pterodactyl-server.js"]
+    volumes:
+      - ./:/app
+    ports:
+      - "8099:8099"

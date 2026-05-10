@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Configure Server — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    body{background:#fff;color:#000;font-family:'DM Sans',sans-serif;}
+
+    /* ── PAGE HERO ── */
+    .cart-hero{background:#555555;color:#fff;padding:3.5rem 0 2rem;text-align:center;}
+    .cart-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin:0 0 .5rem;letter-spacing:-.03em;text-transform:uppercase;}
+    .cart-hero h1 span{color:#b8fb3b;}
+    .cart-hero p{color:rgba(255,255,255,.75);font-size:1rem;margin:0;}
+
+    /* Steps inside hero */
+    .steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:2rem;}
+    .step{display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+    .step.active{color:#b8fb3b;}
+    .step.done{color:rgba(255,255,255,.6);}
+    .step__n{width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;}
+    .step.active .step__n{background:#b8fb3b;border-color:#b8fb3b;color:#000;}
+    .step-line{width:40px;height:2px;background:rgba(255,255,255,.2);margin:0 .4rem;}
+    .step-line.done{background:#b8fb3b55;}
+
+    /* Wave */
+    .wave-down{background:#555555;line-height:0;display:block;margin-bottom:-2px;}
+    .wave-down svg{display:block;width:100%;height:60px;}
+
+    /* ── LAYOUT ── */
+    .cart-body{background:#fff;padding:3rem 0 5rem;}
+    .cart-grid{display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start;}
+    @media(max-width:900px){.cart-grid{grid-template-columns:1fr;}}
+
+    /* ── CARDS ── */
+    .c-card{background:#fff;border:1px solid #e5e7eb;border-radius:1.25rem;padding:1.75rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+    .c-card__title{font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#000;margin:0 0 1.25rem;display:flex;align-items:center;gap:.5rem;}
+    .c-card__title .dot{width:8px;height:8px;border-radius:50%;background:#b8fb3b;flex-shrink:0;}
+
+    /* Plan badge */
+    .plan-badge{display:flex;align-items:center;gap:1rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.875rem;padding:1rem 1.1rem;margin-bottom:1.5rem;}
+    .plan-badge__icon{width:46px;height:46px;border-radius:.75rem;background:linear-gradient(135deg,#b8fb3b22,#a2e03211);border:1px solid #b8fb3b44;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+    .plan-badge__name{font-size:1rem;font-weight:800;color:#000;margin:0 0 .25rem;}
+    .plan-badge__type{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#b8fb3b;color:#000;padding:.15rem .55rem;border-radius:999px;display:inline-block;}
+
+    /* Specs */
+    .specs-row{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+    .spec-box{flex:1;min-width:72px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.75rem;padding:.7rem;text-align:center;}
+    .spec-box__val{font-size:.95rem;font-weight:800;color:#000;display:block;}
+    .spec-box__lbl{font-size:.65rem;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem;display:block;}
+
+    /* Fields */
+    .field{margin-bottom:1rem;}
+    .field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#666;margin-bottom:.4rem;}
+    .field input,.field select{width:100%;border:1px solid #d1d5db;border-radius:.6rem;padding:.7rem .9rem;font-family:inherit;font-size:.93rem;color:#000;background:#fff;outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none;}
+    .field input:focus,.field select:focus{border-color:#a2e032;}
+    .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.2rem;}
+    .field select option{background:#fff;color:#000;}
+
+    /* Divider */
+    .sec-div{display:flex;align-items:center;gap:.6rem;margin:1.5rem 0 1rem;color:#aaa;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+    .sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:#e5e7eb;}
+
+    /* OS Grid */
+    .os-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.6rem;}
+    .os-card{background:#f9fafb;border:2px solid #e5e7eb;border-radius:.75rem;padding:.75rem .5rem;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;}
+    .os-card:hover{border-color:#b8fb3b;background:#f9fafb;}
+    .os-card.sel{border-color:#a2e032;background:#b8fb3b0d;}
+    .os-card__ic{width:38px;height:38px;display:block;margin:0 auto .45rem;object-fit:contain;}
+    .os-card__nm{font-size:.75rem;font-weight:700;color:#000;line-height:1.3;}
+    .os-card__vr{font-size:.65rem;color:#888;margin-top:.1rem;}
+    .os-load{text-align:center;padding:1.5rem;color:#999;font-size:.875rem;grid-column:1/-1;}
+
+    /* Game notice */
+    .game-notice{display:flex;gap:.7rem;background:#b8fb3b0d;border:1px solid #b8fb3b44;border-radius:.75rem;padding:.9rem 1rem;margin-bottom:1rem;}
+    .game-notice p{font-size:.83rem;color:#555;line-height:1.55;margin:0;}
+    .game-notice p strong{color:#5a8f00;}
+
+    /* ── SIDEBAR ── */
+    .sidebar{background:#fff;border:1px solid #e5e7eb;border-radius:1.25rem;padding:1.5rem;position:sticky;top:100px;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+    .sidebar h3{font-size:.95rem;font-weight:800;margin:0 0 1.25rem;}
+    .ol{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid #f3f4f6;font-size:.875rem;color:#666;}
+    .ol:last-of-type{border-bottom:none;}
+    .ol span:last-child{color:#000;font-weight:600;}
+    .total-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:.75rem;padding:.9rem 1rem;}
+    .total-row .lbl{font-size:.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;}
+    .total-row .amt{font-size:1.2rem;font-weight:900;color:#5a8f00;}
+
+    .btn-go{display:block;width:100%;margin-top:1.1rem;padding:.85rem;background:#b8fb3b;color:#000;border:none;border-radius:.75rem;font-family:inherit;font-size:.93rem;font-weight:800;cursor:pointer;transition:filter .2s,transform .15s;letter-spacing:.01em;}
+    .btn-go:hover{filter:brightness(1.06);transform:translateY(-1px);}
+    .btn-go:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+    .sec-note{text-align:center;margin-top:.7rem;font-size:.7rem;color:#aaa;}
+  </style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<!-- Hero -->
+<div style="background:#fff;line-height:0;display:block;margin-bottom:-2px;">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:40px;">
+    <path fill="#555555" d="M0,60 L0,20 C360,55 720,0 1440,20 L1440,60 Z"/>
+  </svg>
+</div>
+<div class="cart-hero">
+  <div class="steps">
+    <div class="step active"><span class="step__n">1</span> Configure</div>
+    <div class="step-line"></div>
+    <div class="step"><span class="step__n">2</span> Checkout</div>
+    <div class="step-line"></div>
+    <div class="step"><span class="step__n">3</span> Activate</div>
+  </div>
+  <h1>Configure Your <span>Server</span></h1>
+  <p id="hero-sub">Select your operating system and preferred settings.</p>
+</div>
+<div class="wave-down">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#ffffff" d="M0,60 L0,20 C360,55 720,0 1440,20 L1440,60 Z"/>
+  </svg>
+</div>
+
+<div class="cart-body">
+  <div class="container">
+    <div class="cart-grid">
+
+      <!-- Main -->
+      <div>
+        <div class="c-card">
+          <div class="c-card__title"><span class="dot"></span> Selected Plan</div>
+          <div class="plan-badge" id="plan-badge" style="display:none;">
+            <div class="plan-badge__icon" id="plan-icon">🖥️</div>
+            <div>
+              <div class="plan-badge__name" id="plan-badge-name">Loading…</div>
+              <span class="plan-badge__type" id="plan-badge-type">—</span>
+            </div>
+          </div>
+          <div class="specs-row" id="specs-row" style="display:none;">
+            <div class="spec-box"><span class="spec-box__val" id="s-cpu">—</span><span class="spec-box__lbl">vCPU</span></div>
+            <div class="spec-box"><span class="spec-box__val" id="s-ram">—</span><span class="spec-box__lbl">RAM</span></div>
+            <div class="spec-box"><span class="spec-box__val" id="s-disk">—</span><span class="spec-box__lbl">Storage</span></div>
+            <div class="spec-box"><span class="spec-box__val">10Gbps</span><span class="spec-box__lbl">Network</span></div>
+          </div>
+        </div>
+
+        <!-- VPS/RDP Config -->
+        <div class="c-card" id="vps-section" style="display:none;">
+          <div class="c-card__title"><span class="dot"></span> Server Settings</div>
+          <div class="field">
+            <label for="hostname">Hostname</label>
+            <input type="text" id="hostname" placeholder="server.host1top.com" value="server.host1top.com"/>
+          </div>
+          <div class="sec-div">Operating System</div>
+          <div class="os-grid" id="os-grid">
+            <div class="os-load">Loading operating systems…</div>
+          </div>
+          <div class="sec-div">Data Center</div>
+          <div class="field">
+            <label for="region">Location</label>
+            <select id="region">
+              <option value="Eygelshoven, Niederlande">🇳🇱 Eygelshoven, Niederlande</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Game Config -->
+        <div class="c-card" id="game-section" style="display:none;">
+          <div class="c-card__title"><span class="dot"></span> Game Server Settings</div>
+          <div class="game-notice">
+            <span style="font-size:1.3rem;flex-shrink:0;">🎮</span>
+            <p>Your <strong>Game Server</strong> will be deployed instantly via Pterodactyl panel. Panel credentials will be sent by email after checkout.</p>
+          </div>
+          <div class="field">
+            <label for="server-name">Server Name</label>
+            <input type="text" id="server-name" placeholder="My Game Server"/>
+          </div>
+          <div class="sec-div">Data Center</div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" value="🇳🇱 Eygelshoven, Niederlande" readonly style="color:#888;background:#f9fafb;cursor:default;"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div>
+        <div class="sidebar">
+          <h3>Order Summary</h3>
+          <div class="ol"><span id="sum-plan">Plan</span><span id="sum-price">$0.00</span></div>
+          <div class="ol"><span>IPv4 Address</span><span>Included</span></div>
+          <div class="ol"><span>Setup Fee</span><span>Free</span></div>
+          <div class="ol" id="sum-os-row" style="display:none;"><span>OS</span><span id="sum-os">—</span></div>
+          <div class="total-row">
+            <span class="lbl">Total / Month</span>
+            <span class="amt" id="sum-total">$0.00</span>
+          </div>
+          <button class="btn-go" id="continue-btn" disabled>Continue to Checkout →</button>
+          <div class="sec-note">🔒 Secure &amp; encrypted checkout</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<script src="header-loader.js"></script>
+<script>
+let planData=null, selectedOs=null;
+const OS_LOGOS={
+  debian:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg',
+  ubuntu:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-original.svg',
+  arch:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg',
+  fedora:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg',
+  alma:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redhat/redhat-original.svg',
+  centos:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/centos/centos-original.svg',
+  rocky:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rockylinux/rockylinux-original.svg',
+  windows:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg'
+};
+const OS_FALLBACK='💿';
+function osLogoUrl(n){
+  n=(n||'').toLowerCase();
+  for(const[k,v]of Object.entries(OS_LOGOS))if(n.includes(k))return v;
+  return null;
+}
+function osIcon(n){
+  const url=osLogoUrl(n);
+  if(url)return`<img class="os-card__ic" src="${url}" alt="${n}" loading="lazy" onerror="this.replaceWith(document.createTextNode('💿'))"/>`;
+  return`<span style="font-size:1.6rem;display:block;margin-bottom:.35rem;">${OS_FALLBACK}</span>`;
+}
+function fmtRam(mb){if(!mb)return'—';return mb>=1024?`${(mb/1024).toFixed(mb%1024===0?0:1)}GB`:`${mb}MB`;}
+function fmtDisk(mb){if(!mb)return'—';return mb>=1024?`${Math.round(mb/1024)}GB`:`${mb}MB`;}
+function typeIcon(t){return t==='RDP'?'🖥️':t==='VPS'?'⚡':t==='GAME'?'🎮':'🖥️';}
+
+function pickOs(internalName,displayName,el){
+  selectedOs=internalName;
+  document.querySelectorAll('.os-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('sum-os').textContent=displayName;
+  document.getElementById('sum-os-row').style.display='flex';
+  document.getElementById('continue-btn').disabled=false;
+}
+
+async function loadOS(tier){
+  const grid=document.getElementById('os-grid');
+  grid.innerHTML='<div class="os-load">Loading operating systems…</div>';
+  try{
+    const token=localStorage.getItem('authToken');
+    const h=token?{'Authorization':`Bearer ${token}`}:{};
+    const type = (planData?.type || '').toUpperCase();
+    const r=await fetch(`/api/user/ryze/os?tier=${encodeURIComponent(tier || '')}&type=${type}`,{headers:h});
+    const d=await r.json();
+    let list=d.data||[];
+    if(list.length===0){
+      const t=(planData.type||'').toUpperCase();
+      list=t==='RDP'
+        ?[{name:'windows-server-19',display_name:'Windows Server 2019', image: OS_LOGOS.windows}]
+        :[{name:'ubuntu-2404-noble',display_name:'Ubuntu 24.04', image: OS_LOGOS.ubuntu},{name:'ubuntu-2204-jammy',display_name:'Ubuntu 22.04 LTS', image: OS_LOGOS.ubuntu},{name:'debian-12-bookworm',display_name:'Debian 12', image: OS_LOGOS.debian}];
+    }
+    grid.innerHTML=list.map(os=>{
+      const internalNm=os.name||os.display_name||'ubuntu-2404-noble';
+      const displayNm=os.display_name||os.name||'Unknown';
+      const parts=displayNm.split(/\s+/);
+      return`<div class="os-card" onclick="pickOs('${internalNm.replace(/'/g,"\\'")}', '${displayNm.replace(/'/g,"\\'")}', this)">
+        ${osIcon(displayNm, os.image)}
+        <div class="os-card__nm">${parts[0]}</div>
+        ${parts.slice(1).join(' ')?`<div class="os-card__vr">${parts.slice(1).join(' ')}</div>`:''}
+      </div>`;
+    }).join('');
+    const first=grid.querySelector('.os-card');
+    if(first)first.click();
+  }catch(e){
+    grid.innerHTML='<div class="os-load" style="color:#ef4444;">Failed to load OS list. Please try again.</div>';
+  }
+}
+
+async function init(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const planId = urlParams.get('plan');
+  
+  if (planId === 'custom') {
+    planData = JSON.parse(localStorage.getItem('pending_order') || 'null');
+    if (!planData) { window.location.href = 'plans/index.html'; return; }
+  } else if (!planId) {
+    window.location.href = 'plans/index.html'; return;
+  }
+
+  try {
+    if (planId !== 'custom') {
+      const r = await fetch(`/api/plans/${planId}`);
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      planData = d.plan;
+    }
+    
+    const T = (planData.type || planData.plan_type || '').toUpperCase();
+    const price = parseFloat(planData.price || planData.plan_price).toFixed(2);
+
+    // Update Hero text based on type
+    document.getElementById('hero-sub').textContent = 
+      T === 'GAME' ? 'Your game server will be deployed automatically via Pterodactyl panel. Instant Activation.' :
+      T === 'RDP' ? 'Configure your Windows Remote Desktop server. Instant Activation & Setup.' :
+      'Configure your KVM VPS. Instant Activation — deployed in seconds.';
+
+    // Update UI Elements
+    document.getElementById('plan-icon').textContent = typeIcon(T);
+    document.getElementById('plan-badge-name').textContent = planData.name || planData.plan_name;
+    document.getElementById('plan-badge-type').textContent = T === 'GAME' ? `GAME · ${planData.game_name || ''}` : T;
+    document.getElementById('plan-badge').style.display = 'flex';
+
+    document.getElementById('s-cpu').textContent = planData.cpu ? `${Math.round(planData.cpu / 100)}x` : '—';
+    document.getElementById('s-ram').textContent = fmtRam(planData.memory);
+    document.getElementById('s-disk').textContent = fmtDisk(planData.disk);
+    document.getElementById('specs-row').style.display = 'flex';
+
+    document.getElementById('sum-plan').textContent = planData.name || planData.plan_name;
+    document.getElementById('sum-price').textContent = `$${price}`;
+    document.getElementById('sum-total').textContent = `$${price}`;
+
+    if (T === 'GAME') {
+      document.getElementById('game-section').style.display = 'block';
+      document.getElementById('vps-section').style.display = 'none';
+      if (planData.server_name) document.getElementById('server-name').value = planData.server_name;
+      document.getElementById('continue-btn').disabled = false;
+    } else {
+      document.getElementById('vps-section').style.display = 'block';
+      document.getElementById('game-section').style.display = 'none';
+      if (planData.hostname) document.getElementById('hostname').value = planData.hostname;
+      if (planData.region) document.getElementById('region').value = planData.region;
+      
+      // If we have a custom OS from the configurator, pre-select it after loading
+      loadOS(planData.tier || '').then(() => {
+        if (planData.ryze_os_id) {
+           // We might need to wait for OS cards to render, or handle it in loadOS
+           // For now, loadOS already selects the first one, but we can refine
+        }
+      });
+    }
+
+    document.getElementById('continue-btn').addEventListener('click', () => {
+      const cfg = {
+        ...planData, // Include all fields from custom plan (nest_id, egg_id, provider, etc.)
+        plan_id: planData.id || null,
+        plan_name: planData.name || planData.plan_name,
+        plan_price: planData.price || planData.plan_price,
+        plan_type: T,
+        billing_cycle: planData.billing_cycle || 'Monthly',
+        provider: planData.provider || 'ryze'
+      };
+      
+      if (T === 'GAME') {
+        cfg.server_name = document.getElementById('server-name').value || cfg.plan_name;
+        cfg.hostname = cfg.server_name;
+        cfg.os_name = 'N/A';
+        cfg.region = 'Eygelshoven, Niederlande';
+      } else {
+        cfg.hostname = document.getElementById('hostname').value || 'server.host1top.com';
+        cfg.os_name = selectedOs || planData.os_name || 'Ubuntu 22.04 LTS';
+        cfg.region = document.getElementById('region').value || 'Eygelshoven, Niederlande';
+      }
+      
+      localStorage.setItem('pending_order', JSON.stringify(cfg));
+      window.location.href = 'checkout.html';
+    });
+  } catch (e) {
+    console.error('Init error:', e);
+    document.getElementById('hero-sub').textContent = 'Error: Plan not found. Please go back and select a plan.';
+  }
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Order your premium game server - HOST1TOP" />
+  <title>Order Game Server — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #b8fb3b;
+      --accent-dark: #1f3c00;
+      --border: #e1e7ef;
+      --radius: 2px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      margin: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: #555555;
+      color: #fff;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: clamp(4rem, 8vw, 7rem) 0 clamp(5rem, 10vw, 9rem);
+    }
+
+    @media (max-width: 860px) {
+      .hero__inner {
+        padding-bottom: 4rem;
+      }
+    }
+
+    .hero__copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 780px;
+    }
+
+    .hero__eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .hero__title {
+      margin: 0;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .hero__title-accent {
+      display: block;
+      color: var(--accent);
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 1;
+    }
+
+    .hero__subtitle {
+      margin: 1.25rem 0 0;
+      max-width: 640px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+    }
+
+    .order-page {
+      padding-top: 2rem;
+      padding-bottom: 8rem;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Horizontal Configuration Bar */
+    .config-bar {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-end;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.04);
+      margin-bottom: 2rem;
+    }
+
+    .config-item {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .config-item label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      color: var(--muted, #5c6470);
+    }
+
+    .config-control {
+      width: 100%;
+      height: 48px;
+      padding: 0 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      color: var(--card-text);
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .game-selector {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .game-option {
+      padding: 0.8rem 1.4rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .game-option.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #000;
+    }
+
+    .game-option:hover:not(.active) {
+      border-color: var(--accent);
+    }
+
+    /* Horizontal Resource Row */
+    .resource-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .resource-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: var(--card-bg);
+      color: var(--card-text);
+    }
+
+    .resource-card header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+    }
+
+    .resource-card .val {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .resource-card .unit {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-left: 0.25rem;
+    }
+
+    /* Range Slider */
+    input[type="range"] {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border: 4px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Summary Bar (Horizontal/Bottom Sticky) */
+    .summary-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      color: #000000;
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 0;
+      z-index: 1000;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.06);
+    }
+
+    .summary-bar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .summary-bar .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .summary-details {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    .summary-details {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .summary-point {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-point .label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .summary-point .value {
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .price-action {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .total-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .total-price small {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .order-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: var(--radius);
+      padding: 1rem 2rem;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .order-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 800px) {
+      .resource-row { grid-template-columns: 1fr; }
+      .summary-details { display: none; }
+      .order-page { padding-bottom: 8rem; }
+    }
+  </style>
+</head>
+<body data-no-footer="true">
+  <div id="header-root"></div>
+
+  <main class="order-page">
+    <!-- Wave TOP (Grey waves into hero) -->
+    <div style="background:#ffffff; line-height:0; display:block; margin-bottom:-2px;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+        style="display:block; width:100%; height:80px;">
+        <path fill="#555555" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <section class="hero">
+      <div class="hero__inner container">
+        <div class="hero__copy">
+          <p class="hero__eyebrow">PREMIUM INFRASTRUCTURE</p>
+          <h1 class="hero__title">
+            Configure Game <span class="hero__title-accent">Server</span>
+          </h1>
+          <p class="hero__subtitle">Tailor your high-performance instance for the ultimate gaming experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wave BOTTOM (White waves into next section) -->
+    <div style="background:#555555; line-height:0; display:block; margin-top:-2px;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+        style="display:block; width:100%; height:80px;">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <div class="container" style="margin-top: 4rem;">
+
+      <!-- Game Selection -->
+      <div class="game-selector">
+        <div class="game-option active" onclick="selectGame('samp', this)">SA-MP</div>
+        <div class="game-option" onclick="selectGame('mta', this)">MTA:SA</div>
+        <div class="game-option" onclick="selectGame('minecraft', this)">Minecraft</div>
+        <div class="game-option" onclick="selectGame('rust', this)">Rust</div>
+      </div>
+
+      <!-- Resource Configuration -->
+      <div class="resource-row">
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label">Player Slots</label>
+            <div><span class="val" id="slots-val">50</span><span class="unit">Slots</span></div>
+          </header>
+          <input type="range" id="slots-slider" min="10" max="1000" value="50" step="10">
+        </article>
+
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label">RAM Priority</label>
+            <div><span class="val" id="ram-val">1</span><span class="unit">GB</span></div>
+          </header>
+          <input type="range" id="ram-slider" min="1" max="32" value="1" step="1">
+        </article>
+
+        <article class="resource-card">
+          <header>
+            <label class="config-item-label">NVMe Storage</label>
+            <div><span class="val" id="disk-val">5</span><span class="unit">GB</span></div>
+          </header>
+          <input type="range" id="disk-slider" min="1" max="100" value="5" step="5">
+        </article>
+      </div>
+
+      <!-- Additional Settings (Horizontal Config Bar) -->
+      <div class="config-bar">
+        <div class="config-item">
+          <label>Billing Cycle</label>
+          <select id="duration" class="config-control">
+            <option value="30">Monthly Billing</option>
+            <option value="90">Quarterly (5% Off)</option>
+            <option value="180">Semi-Annually (10% Off)</option>
+            <option value="365">Annually (20% Off)</option>
+          </select>
+        </div>
+        <div class="config-item">
+          <label>Server Location</label>
+          <div class="config-control" style="background: #f1f5f9; cursor: not-allowed;">
+            <span>Netherlands, EU</span>
+          </div>
+        </div>
+        <div class="config-item">
+          <label>vCPU Priority</label>
+          <div class="config-control" id="cpu-display">100% Shared</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sticky Summary Bar -->
+  <aside class="summary-bar">
+    <div class="container">
+      <div class="summary-details">
+        <div class="summary-point">
+          <span class="label">Game</span>
+          <span class="value" id="sum-game">SA-MP</span>
+        </div>
+        <div class="summary-point">
+          <span class="label">Hardware</span>
+          <span class="value" id="sum-specs">50 Slots / 1GB RAM</span>
+        </div>
+        <div class="summary-point">
+          <span class="label">Activation</span>
+          <span class="value" style="color: #16a34a">Instant</span>
+        </div>
+      </div>
+
+      <div class="price-action">
+        <div class="total-price" style="color:#000">$<span id="total-price">3.23</span><small>/mo</small></div>
+        <button class="order-btn" onclick="handleCheckout()">Continue</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="../header-loader.js"></script>
+  <script src="../app.js"></script>
+  <script>
+    let selectedGame = { name: 'SA-MP', nestId: 5, eggId: 18, pricePerSlot: 0.0646, ram: 1, disk: 5 };
+    const games = {
+      samp: { name: 'SA-MP', nestId: 5, eggId: 18, pricePerSlot: 0.0646, ram: 1, disk: 5 },
+      mta: { name: 'MTA:SA', nestId: 5, eggId: 19, pricePerSlot: 0.0850, ram: 2, disk: 10 },
+      minecraft: { name: 'Minecraft', nestId: 1, eggId: 3, pricePerSlot: 0.1200, ram: 4, disk: 20 },
+      rust: { name: 'Rust', nestId: 5, eggId: 20, pricePerSlot: 0.1500, ram: 8, disk: 50 }
+    };
+
+    function selectGame(id, el) {
+      document.querySelectorAll('.game-option').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedGame = games[id];
+      document.getElementById('ram-slider').value = selectedGame.ram;
+      document.getElementById('disk-slider').value = selectedGame.disk;
+      updateUI();
+    }
+
+    function updateUI() {
+      const slots = parseInt(document.getElementById('slots-slider').value);
+      const ram = parseInt(document.getElementById('ram-slider').value);
+      const disk = parseInt(document.getElementById('disk-slider').value);
+      const duration = parseInt(document.getElementById('duration').value);
+
+      document.getElementById('slots-val').textContent = slots;
+      document.getElementById('ram-val').textContent = ram;
+      document.getElementById('disk-val').textContent = disk;
+
+      let total = (slots * selectedGame.pricePerSlot);
+      total += (ram - selectedGame.ram) * 2.00;
+      total += (disk - selectedGame.disk) * 0.10;
+
+      if (duration === 90) total *= 0.95;
+      else if (duration === 180) total *= 0.90;
+      else if (duration === 365) total *= 0.80;
+
+      document.getElementById('total-price').textContent = Math.max(0.50, total).toFixed(2);
+      document.getElementById('sum-game').textContent = selectedGame.name;
+      document.getElementById('sum-specs').textContent = `${slots} Slots / ${ram}GB RAM`;
+    }
+
+    ['slots-slider', 'ram-slider', 'disk-slider'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateUI);
+    });
+    document.getElementById('duration').addEventListener('change', updateUI);
+
+    function handleCheckout() {
+      const orderData = {
+        plan_id: 0,
+        plan_name: `Custom ${selectedGame.name} Server`,
+        plan_price: parseFloat(document.getElementById('total-price').textContent),
+        plan_type: 'GAME',
+        game_name: selectedGame.name,
+        slots: parseInt(document.getElementById('slots-slider').value),
+        nest_id: selectedGame.nestId,
+        egg_id: selectedGame.eggId,
+        memory: parseInt(document.getElementById('ram-slider').value) * 1024,
+        cpu: 100,
+        disk: parseInt(document.getElementById('disk-slider').value) * 1024,
+        region: 'Netherlands, EU',
+        billing_cycle: document.getElementById('duration').options[document.getElementById('duration').selectedIndex].text,
+        provider: 'pterodactyl'
+      };
+      localStorage.setItem('pending_order', JSON.stringify(orderData));
+      window.location.href = '../cart.html?plan=custom';
+    }
+
+    updateUI();
+  </script>
+  <script src="../app.js"></script>
+</body>
+</html>

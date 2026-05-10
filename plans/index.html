@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="HOST1TOP hosting plans — Premium Cloud & Game Hosting solutions." />
+  <title>Hosting Plans — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #000;
+    }
+
+    .plans-hero {
+      background: #555555;
+      color: #fff;
+      padding-top: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plans-hero__inner {
+      padding-bottom: 5rem;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .plans-hero__title {
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .plans-hero__title span {
+      color: var(--accent);
+    }
+
+    .hero-wave-bottom {
+      background: #555555;
+      line-height: 0;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      padding-block: 5rem;
+    }
+
+    .plan-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .plan-card__icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(184, 251, 59, 0.08);
+      color: var(--accent-dark);
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .plan-card h2 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      margin: 0 0 1rem;
+      text-transform: uppercase;
+    }
+
+    .plan-card p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      flex-grow: 1;
+    }
+
+    .plan-card .btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 999px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin-inline: auto;
+      padding-inline: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="plans-hero">
+      <div class="container plans-hero__inner">
+        <span class="hero-eyebrow">PREMIUM INFRASTRUCTURE</span>
+        <h1 class="plans-hero__title">Our <span>Hosting</span> Plans</h1>
+        <p style="font-size: 1.1rem; opacity: 0.8; max-width: 600px; margin: 1rem auto 0;">
+          Premium infrastructure for developers, gamers, and businesses. Choose your platform and start deploying in seconds.
+        </p>
+      </div>
+    </section>
+
+    <!-- Wave BOTTOM -->
+    <div class="hero-wave-bottom">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:80px;">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="plans-grid">
+        <!-- BUDGET CLOUD -->
+        <article class="plan-card">
+          <div class="plan-card__icon">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/>
+            </svg>
+          </div>
+          <h2>Cloud VPS</h2>
+          <p>Affordable and reliable cloud hosting for small projects.</p>
+          <a href="order-vps-rdp.html?tier=budget" class="btn btn--primary">Configure</a>
+        </article>
+
+        <!-- EXTREME CLOUD -->
+        <article class="plan-card">
+          <div class="plan-card__icon">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h2>Extreme VPS</h2>
+          <p>Maximum performance powered by AMD Ryzen 9 9950X for demanding applications.</p>
+          <a href="order-vps-rdp.html?tier=extreme" class="btn btn--primary" style="background: var(--accent); color: #000; border-color: var(--accent);">Configure</a>
+        </article>
+
+        <!-- GAME HOSTING -->
+        <article class="plan-card">
+          <div class="plan-card__icon">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/>
+            </svg>
+          </div>
+          <h2>Game Server</h2>
+          <p>Tailor your high-performance instance for the ultimate gaming experience.</p>
+          <a href="order-game.html" class="btn btn--primary">Configure</a>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="../header-loader.js"></script>
+  <script src="../app.js"></script>
+  <script src="../ui-improvements.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Terms of Service — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-gray: #f9fafb;
+      --hero-bg: #555555;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: #1a1a1a;
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    /* ── INDEX STYLE HERO ── */
+    .tos-hero {
+      background: var(--hero-bg);
+      color: #fff;
+      padding: clamp(6rem, 10vw, 9rem) 0 clamp(4rem, 8vw, 6rem);
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-subtitle {
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-ctas {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-primary {
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      padding: 0.9rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-hero-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      backdrop-filter: blur(5px);
+      transition: all 0.2s ease;
+    }
+
+    /* ── PAGE CONTENT ── */
+    .wave-container { line-height: 0; background: #fff; margin-bottom: -2px; }
+    .wave-container svg { width: 100%; height: 80px; display: block; }
+
+    .tos-section { padding: 5rem 0; background: var(--bg-light); }
+    .tos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .tos-card { background: #fff; border: 1px solid #edf2f7; border-radius: 2px; padding: 2.5rem; transition: all 0.3s ease; box-shadow: var(--card-shadow); }
+    .tos-card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-hover); border-color: var(--accent); }
+    .tos-card h2 { font-size: 1.25rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; color: #000; display: flex; align-items: center; gap: 0.75rem; }
+    .tos-card h2::before { content: ""; width: 4px; height: 1.25rem; background: var(--accent); display: block; }
+    .tos-card p, .tos-card li { color: #666; line-height: 1.6; font-size: 0.95rem; }
+    .tos-card ul { padding-left: 1.25rem; margin: 0; }
+    .tos-card li { margin-bottom: 0.5rem; }
+
+    /* Dark Mode Contact */
+    .contact-section {
+      background: var(--hero-bg);
+      color: #fff;
+      padding: 0 0 8rem;
+      position: relative;
+    }
+  </style>
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main>
+    <!-- Wave TOP -->
+    <div class="wave-container">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#555555" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <header class="tos-hero">
+      <div class="container">
+        <span class="hero-eyebrow">PREMIUM INFRASTRUCTURE</span>
+        <h1 class="hero-title">Terms & <span>Conditions</span></h1>
+        <p class="hero-subtitle">Effective when published on host1top. Plain-language summary first—see sections for contractual detail.</p>
+        
+        <div class="hero-ctas">
+          <a href="index.html#plans" class="btn-hero-primary" data-i18n="discover_plans">Discover the plans!</a>
+          <a href="mailto:support@host1top.com" class="btn-hero-secondary" data-i18n="talk_to_us">Talk to us!</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="wave-container" style="background:#555555;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <section class="tos-section">
+      <div class="container">
+        <nav class="breadcrumb" style="justify-content: center; margin-bottom: 4rem;">
+          <a href="index.html" data-i18n="home" style="color: #666;">Home</a>
+          <span aria-hidden="true" style="color: #ddd; margin: 0 0.75rem;">/</span>
+          <span aria-current="page" data-i18n="terms" style="color: #000; font-weight: 700;">Terms</span>
+        </nav>
+
+        <div class="tos-grid">
+          <div class="tos-card">
+            <h2 data-i18n="agreement">Agreement</h2>
+            <p data-i18n="agreement_p">By ordering, activating or renewing a HOST1TOP service, you accept these Terms and any order-specific annex.</p>
+          </div>
+          <div class="tos-card">
+            <h2 data-i18n="fair_use">Services & fair use</h2>
+            <ul>
+              <li data-i18n="fair_use_p">Specifications derive from accepted quotes or invoices—not marketing pages.</li>
+            </ul>
+          </div>
+          <div class="tos-card">
+            <h2 data-i18n="payments">Payments & renewals</h2>
+            <ul>
+              <li data-i18n="payments_p">Charges accrue according to catalogue. Failure to pay within stated grace freezes workloads.</li>
+            </ul>
+          </div>
+          <div class="tos-card">
+            <h2 data-i18n="acceptable_use">Acceptable use</h2>
+            <ul>
+              <li data-i18n="acceptable_use_p">Abuse material, terror, attacks, or spam constitute immediate termination.</li>
+            </ul>
+          </div>
+          <div class="tos-card">
+            <h2 data-i18n="data_backups">Data & backups</h2>
+            <ul>
+              <li data-i18n="data_backups_p">Hosted backups augment—not replace—Customer retention policies.</li>
+            </ul>
+          </div>
+          <div class="tos-card">
+            <h2 data-i18n="limitation_liability">Limitation of liability</h2>
+            <ul>
+              <li data-i18n="limitation_liability_p">Liability caps at prepaid fees invoiced within the preceding three months.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wave TOP into Contact -->
+    <div class="wave-container">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#555555" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+    <section class="contact-section">
+      <div class="container" style="text-align: center; padding-top: 4rem;">
+        <h2 style="color: var(--accent); font-size: 2.5rem; font-weight: 900; margin-bottom: 2rem;" data-i18n="contact">Contact</h2>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 3rem; border-radius: 2px; max-width: 800px; margin: 0 auto;">
+          <p style="margin: 0; font-weight: 700; color: #fff; font-size: 1.25rem; line-height: 1.8;" data-i18n="contact_p">
+            Legal enquiries: <span style="color: var(--accent);">legal@host1top.com</span><br>
+            Operational support: <span style="color: var(--accent);">support@host1top.com</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final Wave into Footer -->
+    <div class="wave-container" style="background:#555555;">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ffffff" d="M0,100 L0,30 C240,80 480,0 720,30 C960,60 1200,0 1440,30 L1440,100 Z" />
+      </svg>
+    </div>
+
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="dashboard-enhancements.css" />
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label" data-i18n="available_balance">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html"><svg class="icon-use" width="18" height="18"><use href="#i-layers"/></svg> <span data-i18n="dashboard">Dashboard</span></a>
+        <a href="my-services.html"><svg class="icon-use" width="18" height="18"><use href="#i-server"/></svg> <span data-i18n="your_services">My Services</span></a>
+        <a href="invoices.html"><svg class="icon-use" width="18" height="18"><use href="#i-cube"/></svg> <span data-i18n="invoices">Invoices</span></a>
+        <a href="cashbox.html"><svg class="icon-use" width="18" height="18"><use href="#i-activity"/></svg> <span>Cashbox</span></a>
+        <a href="tickets.html" class="active"><svg class="icon-use" width="18" height="18"><use href="#i-support"/></svg> <span data-i18n="support_tickets">Support Tickets</span></a>
+        <a href="profile.html"><svg class="icon-use" width="18" height="18"><use href="#i-users"/></svg> <span data-i18n="my_profile">Profile</span></a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout" style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left"/></svg> <span data-i18n="logout">Logout</span>
+        </button>
+      </aside>
+      
+      <div class="dash-content dash-page-stack">
+        <section class="dash-page-hero">
+          <div class="dash-page-hero__content">
+            <span class="dash-page-eyebrow">Support Center</span>
+            <header class="panel-header" style="margin:0.9rem 0 0;">
+              <h1 data-i18n="support_tickets_title">Support Tickets</h1>
+              <p data-i18n="support_tickets_desc">Contact the infrastructure and support team 24/7 with cleaner status tracking and faster context.</p>
+            </header>
+          </div>
+          <div class="dash-page-hero__actions">
+            <a href="new-ticket.html" class="btn btn--primary" data-i18n="open_ticket">Open New Ticket</a>
+          </div>
+        </section>
+
+        <section class="dash-page-summary" aria-label="Ticket summary">
+          <article class="dash-summary-card dash-summary-card--accent">
+            <span class="dash-summary-card__label">Total Tickets</span>
+            <div id="tickets-total" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">All requests in your support history</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Open Issues</span>
+            <div id="tickets-open" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">Tickets that still need follow-up</div>
+          </article>
+          <article class="dash-summary-card">
+            <span class="dash-summary-card__label">Urgent / High</span>
+            <div id="tickets-priority" class="dash-summary-card__value">0</div>
+            <div class="dash-summary-card__meta">Priority items you may want to review first</div>
+          </article>
+        </section>
+
+        <section class="dash-support-grid">
+          <section class="dash-table-shell">
+            <div class="dash-table-shell__header">
+              <div>
+                <h2>Recent Ticket Activity</h2>
+                <p>Open any ticket to continue the conversation or review the latest support response.</p>
+              </div>
+            </div>
+            <div class="data-table-wrap" style="box-shadow:none; border:none; border-radius:0; background:transparent;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="ticket_no">Ticket No.</th>
+                    <th data-i18n="subject">Subject</th>
+                    <th data-i18n="status">Status</th>
+                    <th data-i18n="priority">Priority</th>
+                    <th data-i18n="created_at">Created At</th>
+                  </tr>
+                </thead>
+                <tbody id="tickets-tbody">
+                  <tr><td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);" data-i18n="loading_tickets">Loading your tickets...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside class="dash-support-callout">
+            <h3>Support Best Practices</h3>
+            <p>Give the team the fastest route to a fix by including exact impact and context.</p>
+            <ul>
+              <li>Use clear subjects like “FiveM hitch spikes after restart”.</li>
+              <li>Attach service context or ticket replies with exact timestamps.</li>
+              <li>Open a new urgent ticket only for production-impact incidents.</li>
+            </ul>
+          </aside>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function fetchTickets() {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        window.location.href = 'my-account.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user/tickets', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch tickets');
+
+        const data = await response.json();
+        const tbody = document.getElementById('tickets-tbody');
+        const tickets = Array.isArray(data.tickets) ? data.tickets : [];
+        document.getElementById('tickets-total').textContent = tickets.length;
+        document.getElementById('tickets-open').textContent = tickets.filter(ticket => ticket.status === 'OPEN').length;
+        document.getElementById('tickets-priority').textContent = tickets.filter(ticket => ['urgent', 'high'].includes(String(ticket.priority).toLowerCase())).length;
+        
+        const noTicketsText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.no_tickets || 'No support tickets found.';
+
+        if (tickets.length > 0) {
+          tbody.innerHTML = tickets.map(ticket => `
+            <tr>
+              <td><strong>#T-${ticket.id}</strong></td>
+              <td><a href="ticket-view.html?id=${ticket.id}" class="dash-table-link">${ticket.subject}</a></td>
+              <td><span class="status-badge status-badge--${ticket.status.toLowerCase()}">${ticket.status.replace('_', ' ')}</span></td>
+              <td><span style="text-transform:capitalize;">${ticket.priority}</span></td>
+              <td>${new Date(ticket.created_at).toLocaleDateString()}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="5" style="padding:2rem; text-align:center; color:var(--muted);">${noTicketsText}</td></tr>`;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('tickets-total').textContent = '--';
+        document.getElementById('tickets-open').textContent = '--';
+        document.getElementById('tickets-priority').textContent = '--';
+        const errorText = window.translations?.[localStorage.getItem('selectedLanguage') || 'en']?.error_loading_tickets || 'Error loading tickets.';
+        document.getElementById('tickets-tbody').innerHTML = `<tr><td colspan="5" style="padding:2rem; text-align:center; color:#ef4444;">${errorText}</td></tr>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchTickets);
+  </script>
+  <script src="header-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+[Ptero:Config] URL: https://gp.host1top.com
+🚀 Server and Frontend are running simultaneously on port 3001
+🌍 Access the website at http://localhost:3001
+Connected to Neon PostgreSQL database.
+[initDB] Verified ryze_vmid column
+Database tables initialized.
+[Checkout] Provisioning GAME service for user 11...
+[Checkout] Linked service to Ptero UUID: aaa094ee-2a81-43b1-abab-e4699823533f
+[Mailer] Email sent → zexgerman@outlook.com | Welcome to HOST1TOP — Account Created ✅
+[Checkout] Provisioning GAME service for user 11...
+[Checkout] Linked service to Ptero UUID: e8667722-2275-4725-946b-87d5f6e11911
+[Mailer] Email sent → ayoubchaibi611@gmail.com | Funds Added — HOST1TOP
+[Checkout] Provisioning GAME service for user 11...
+[Checkout] Linked service to Ptero UUID: 2c8d7967-0839-4be1-bd59-b094a7dfddd1
+[Mailer] Email sent → ayoubchaibi611@gmail.com | Ticket #1 Opened — ayoub new
+[Mailer] Email sent → ayoubchaibi611@gmail.com | Re: Ticket #1 — ayoub new
+[Mailer] Email sent → ayoubchaibi611@gmail.com | Ticket #1 Closed — ayoub new
+[Checkout] Provisioning GAME service for user 11...
+[Checkout] Linked service to Ptero UUID: cca19b4c-96dc-41d7-81cb-09678f043f8c
+[Checkout] Provisioning GAME service for user 11...
+[Checkout] Linked service to Ptero UUID: 1046bafa-f96d-4fad-9986-ef39e2894ec1

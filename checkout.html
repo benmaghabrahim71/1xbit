@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: #fff;
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Hero */
+    .co-hero {
+      background: #555555;
+      color: #fff;
+      padding: 3.5rem 0 2rem;
+      text-align: center;
+    }
+
+    .co-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      margin: 0 0 .5rem;
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+    }
+
+    .co-hero h1 span {
+      color: #b8fb3b;
+    }
+
+    .co-hero p {
+      color: rgba(255, 255, 255, .75);
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .4);
+    }
+
+    .step.active {
+      color: #b8fb3b;
+    }
+
+    .step.done {
+      color: rgba(255, 255, 255, .65);
+    }
+
+    .step__n {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      font-weight: 900;
+    }
+
+    .step.active .step__n {
+      background: #b8fb3b;
+      border-color: #b8fb3b;
+      color: #000;
+    }
+
+    .step.done .step__n {
+      background: rgba(255, 255, 255, .15);
+      border-color: rgba(255, 255, 255, .5);
+    }
+
+    .step-line {
+      width: 40px;
+      height: 2px;
+      background: rgba(255, 255, 255, .2);
+      margin: 0 .4rem;
+    }
+
+    .step-line.done {
+      background: #b8fb3b55;
+    }
+
+    /* Wave */
+    .wave-d {
+      background: #555555;
+      line-height: 0;
+      margin-bottom: -2px;
+    }
+
+    .wave-d svg {
+      display: block;
+      width: 100%;
+      height: 60px;
+    }
+
+    /* Body */
+    .co-body {
+      background: #fff;
+      padding: 3rem 0 5rem;
+    }
+
+    .co-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media(max-width:900px) {
+      .co-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .c-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    }
+
+    .c-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .c-card__title {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #000;
+      margin: 0 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .c-card__title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #b8fb3b;
+      flex-shrink: 0;
+    }
+
+    /* Fields */
+    .f-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media(max-width:580px) {
+      .f-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: .4rem;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: .6rem;
+      padding: .7rem .9rem;
+      font-family: inherit;
+      font-size: .93rem;
+      color: #000;
+      background: #fff;
+      outline: none;
+      transition: border-color .2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #a2e032;
+    }
+
+    .field input::placeholder {
+      color: #bbb;
+    }
+
+    .field input[readonly] {
+      color: #888;
+      background: #f9fafb;
+      cursor: default;
+    }
+
+    .field-note {
+      font-size: .7rem;
+      color: #aaa;
+      margin-top: .3rem;
+    }
+
+    /* Order review rows */
+    .or-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .5rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: .875rem;
+    }
+
+    .or-row:last-child {
+      border-bottom: none;
+    }
+
+    .or-row .k {
+      color: #888;
+    }
+
+    .or-row .v {
+      color: #000;
+      font-weight: 700;
+    }
+
+    .type-pill {
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: #b8fb3b;
+      color: #000;
+      padding: .15rem .55rem;
+      border-radius: 999px;
+    }
+
+    /* Payment option */
+    .pay-opt {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: .875rem;
+      padding: .9rem 1rem;
+      cursor: pointer;
+      transition: border-color .2s;
+      margin-bottom: .75rem;
+    }
+
+    .pay-opt.sel {
+      border-color: #a2e032;
+      background: #b8fb3b08;
+    }
+
+    .pay-opt input[type=radio] {
+      display: none;
+    }
+
+    .pay-opt__ic {
+      width: 38px;
+      height: 38px;
+      border-radius: .6rem;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .pay-opt__info {
+      flex: 1;
+    }
+
+    .pay-opt__nm {
+      font-size: .9rem;
+      font-weight: 800;
+      color: #000;
+    }
+
+    .pay-opt__ds {
+      font-size: .73rem;
+      color: #888;
+    }
+
+    .pay-opt__chk {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+
+    .pay-opt.sel .pay-opt__chk {
+      background: #b8fb3b;
+      border-color: #a2e032;
+    }
+
+    .pay-opt.sel .pay-opt__chk::after {
+      content: '✓';
+      font-size: .65rem;
+      font-weight: 900;
+      color: #000;
+    }
+
+    /* Balance row */
+    .bal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: .75rem;
+      padding: .8rem 1rem;
+      margin-top: .75rem;
+    }
+
+    .bal-row .lbl {
+      font-size: .8rem;
+      color: #888;
+    }
+
+    .bal-row .val {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #5a8f00;
+    }
+
+    .bal-row .val.low {
+      color: #ef4444;
+    }
+
+    .insuf {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: .75rem;
+      padding: .75rem 1rem;
+      margin-top: .75rem;
+      font-size: .82rem;
+      color: #dc2626;
+      gap: .5rem;
+    }
+
+    .insuf.show {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .funds-link {
+      display: block;
+      color: #dc2626;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: .2rem;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      position: sticky;
+      top: 100px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    }
+
+    .sidebar h3 {
+      font-size: .95rem;
+      font-weight: 800;
+      margin: 0 0 1.25rem;
+    }
+
+    .ol {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .55rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: .875rem;
+      color: #666;
+    }
+
+    .ol:last-of-type {
+      border-bottom: none;
+    }
+
+    .ol span:last-child {
+      color: #000;
+      font-weight: 600;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: .75rem;
+      padding: .9rem 1rem;
+    }
+
+    .total-row .lbl {
+      font-size: .75rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .total-row .amt {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #5a8f00;
+    }
+
+    .btn-complete {
+      display: block;
+      width: 100%;
+      margin-top: 1.1rem;
+      padding: .88rem;
+      background: #b8fb3b;
+      color: #000;
+      border: none;
+      border-radius: .75rem;
+      font-family: inherit;
+      font-size: .93rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: filter .2s, transform .15s;
+      letter-spacing: .01em;
+    }
+
+    .btn-complete:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .btn-complete:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-complete .sp {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(0, 0, 0, .3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+      margin-right: .35rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .sec-note {
+      text-align: center;
+      margin-top: .7rem;
+      font-size: .7rem;
+      color: #aaa;
+    }
+
+    /* Terms Checkbox */
+    .terms-box {
+      margin-top: 1.25rem;
+      padding: 0 .25rem;
+    }
+
+    .t-check {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      cursor: pointer;
+      margin-bottom: .75rem;
+      user-select: none;
+    }
+
+    .t-check input {
+      display: none;
+    }
+
+    .t-check__box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .2s;
+      margin-top: 2px;
+    }
+
+    .t-check:hover .t-check__box {
+      border-color: #b8fb3b;
+    }
+
+    .t-check input:checked+.t-check__box {
+      background: #b8fb3b;
+      border-color: #a2e032;
+    }
+
+    .t-check input:checked+.t-check__box::after {
+      content: '✓';
+      font-size: .75rem;
+      font-weight: 900;
+      color: #000;
+    }
+
+    .t-check__txt {
+      font-size: .82rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .t-check__txt a {
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid #b8fb3b;
+    }
+
+    .t-check__txt a:hover {
+      color: #5a8f00;
+    }
+
+    /* Success overlay */
+    .success-ov {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(255, 255, 255, .97);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .success-ov.show {
+      display: flex;
+    }
+
+    .success-ov__icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pop .4s ease-out;
+    }
+
+    .success-ov__title {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #000;
+      margin-bottom: .5rem;
+    }
+
+    .success-ov__sub {
+      color: #666;
+      font-size: 1rem;
+      max-width: 380px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .success-ov__order {
+      color: #111;
+      font-size: .9rem;
+      font-weight: 700;
+      margin: -.8rem 0 1.2rem;
+    }
+
+    .success-ov__meta {
+      color: #444;
+      font-size: .88rem;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 0 1.2rem;
+      white-space: pre-line;
+    }
+
+    .success-ov__btn {
+      padding: .85rem 2rem;
+      background: #b8fb3b;
+      color: #000;
+      border: none;
+      border-radius: .75rem;
+      font-family: inherit;
+      font-size: .93rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(.5);
+        opacity: 0;
+      }
+
+      80% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header-root"></div>
+
+  <!-- Success Overlay -->
+  <div class="success-ov" id="success-ov">
+    <div class="success-ov__icon">🎉</div>
+    <h2 class="success-ov__title">Order Placed!</h2>
+    <p class="success-ov__sub" id="success-msg">Your server is being provisioned. You'll receive login details by email
+      shortly.</p>
+    <div class="success-ov__order" id="success-order-id"></div>
+    <div class="success-ov__meta" id="success-meta"></div>
+    <button class="success-ov__btn" id="panel-btn" onclick="window.location.href='my-services.html'">View My Services
+      →</button>
+  </div>
+
+  <!-- Hero -->
+  <div style="background:#fff;line-height:0;margin-bottom:-2px;">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+      style="display:block;width:100%;height:40px;">
+      <path fill="#555555" d="M0,60 L0,20 C360,55 720,0 1440,20 L1440,60 Z" />
+    </svg>
+  </div>
+  <div class="co-hero">
+    <div class="steps">
+      <div class="step done"><span class="step__n">✓</span> Configure</div>
+      <div class="step-line done"></div>
+      <div class="step active"><span class="step__n">2</span> Checkout</div>
+      <div class="step-line"></div>
+      <div class="step"><span class="step__n">3</span> Activate</div>
+    </div>
+    <h1>Complete Your <span>Order</span></h1>
+    <p>Review your order and confirm billing details below.</p>
+  </div>
+  <div class="wave-d">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#ffffff" d="M0,60 L0,20 C360,55 720,0 1440,20 L1440,60 Z" />
+    </svg>
+  </div>
+
+  <div class="co-body">
+    <div class="container">
+      <div class="co-grid">
+
+        <!-- LEFT -->
+        <div>
+          <!-- Billing Details (Only if not logged in, but user requested to hide if already logged in) -->
+          <!-- Actually user says: "if arleady login dont see Billing Details... and if not add just a button to send to /my-account.html" -->
+
+          <div class="c-card" id="login-card" style="display:none;">
+            <div class="c-card__title"><span class="dot"></span> Account Required</div>
+            <p style="font-size: 0.875rem; color: #666; margin-bottom: 1.25rem;">You must be logged in to complete your
+              purchase. Please sign in or register to continue.</p>
+            <button class="btn-complete" onclick="window.location.href='my-account.html'">Login / Register →</button>
+          </div>
+
+          <div class="c-card" id="billing-card" style="display:none;">
+            <div class="c-card__title"><span class="dot"></span> Billing Details</div>
+            <div class="f-row">
+              <div class="field"><label for="fname">First Name</label><input type="text" id="fname"
+                  placeholder="John" /></div>
+              <div class="field"><label for="lname">Last Name</label><input type="text" id="lname" placeholder="Doe" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="you@example.com" />
+              <div class="field-note">Order confirmation sent here.</div>
+            </div>
+          </div>
+
+          <!-- Order Review -->
+          <div class="c-card">
+            <div class="c-card__title"><span class="dot"></span> Order Review</div>
+            <div class="or-row"><span class="k">Plan</span><span class="v" id="or-plan">—</span></div>
+            <div class="or-row"><span class="k">Type</span><span class="v"><span class="type-pill"
+                  id="or-type">—</span></span></div>
+            <div class="or-row" id="or-os-row"><span class="k">OS</span><span class="v" id="or-os">—</span></div>
+            <div class="or-row" id="or-host-row"><span class="k">Hostname</span><span class="v" id="or-host">—</span>
+            </div>
+            <div class="or-row"><span class="k">Location</span><span class="v" id="or-region">Eygelshoven,
+                Niederlande</span></div>
+            <div class="or-row"><span class="k">Billing Cycle</span><span class="v" id="or-billing">Monthly</span></div>
+          </div>
+
+          <!-- Payment -->
+          <div class="c-card">
+            <div class="c-card__title"><span class="dot"></span> Payment Method</div>
+            <label class="pay-opt sel" id="pay-bal">
+              <input type="radio" name="gw" value="balance" checked />
+              <div class="pay-opt__ic">💰</div>
+              <div class="pay-opt__info">
+                <div class="pay-opt__nm">Account Balance</div>
+                <div class="pay-opt__ds">Instant · no processing fees</div>
+              </div>
+              <div class="pay-opt__chk"></div>
+            </label>
+            <div class="bal-row">
+              <span class="lbl">Available Balance</span>
+              <span class="val" id="bal-val">Loading…</span>
+            </div>
+            <div class="insuf" id="insuf-warn">
+              <span>⚠️</span>
+              <div>Insufficient balance. <span class="funds-link"
+                  onclick="window.location.href='my-account.html#billing'">Add funds →</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+          <div class="sidebar">
+            <h3>Order Summary</h3>
+            <div class="ol"><span id="sum-plan">Plan</span><span id="sum-price">$0.00</span></div>
+            <div class="ol"><span>IPv4 Address</span><span>Included</span></div>
+            <div class="ol"><span>Setup Fee</span><span>Free</span></div>
+            <div class="ol" id="sum-os-row" style="display:none;"><span>OS</span><span id="sum-os">—</span></div>
+            <div class="total-row">
+              <span class="lbl">Total Due</span>
+              <span class="amt" id="sum-total">$0.00</span>
+            </div>
+
+            <div class="terms-box">
+              <label class="t-check">
+                <input type="checkbox" id="terms-chk" />
+                <div class="t-check__box"></div>
+                <div class="t-check__txt">I agree to the <a href="tos.html" target="_blank">Terms of Service</a></div>
+              </label>
+              <label class="t-check">
+                <input type="checkbox" id="privacy-chk" />
+                <div class="t-check__box"></div>
+                <div class="t-check__txt">I agree to the <a href="privacy.html" target="_blank">Privacy Policy</a></div>
+              </label>
+            </div>
+
+            <button class="btn-complete" id="complete-btn" disabled>Complete Order</button>
+            <div class="sec-note">🔒 256-bit SSL encrypted</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-root"></div>
+  <script src="header-loader.js"></script>
+  <script src="client-api.js"></script>
+  <script>
+    let order = null;
+
+    async function getBalance() {
+      const tok = localStorage.getItem('authToken');
+      if (!tok) return null;
+      try {
+        const r = await fetch('/api/auth/me', { headers: { 'Authorization': `Bearer ${tok}` } });
+        const d = await r.json();
+        return d.user ? parseFloat(d.user.balance) : null;
+      } catch { return null; }
+    }
+
+    function applyBalance(bal, price) {
+      const el = document.getElementById('bal-val');
+      const warn = document.getElementById('insuf-warn');
+      const btn = document.getElementById('complete-btn');
+      const termsChecked = document.getElementById('terms-chk').checked;
+      const privacyChecked = document.getElementById('privacy-chk').checked;
+
+      if (bal === null) { el.textContent = 'Log in to see balance'; el.className = 'val low'; btn.disabled = true; return; }
+      el.textContent = `$${bal.toFixed(2)} USD`;
+
+      if (bal >= price) {
+        el.className = 'val';
+        warn.classList.remove('show');
+        btn.disabled = !(termsChecked && privacyChecked);
+      } else {
+        el.className = 'val low';
+        warn.classList.add('show');
+        btn.disabled = true;
+      }
+    }
+
+    function updateButtonState() {
+      const btn = document.getElementById('complete-btn');
+      const termsChecked = document.getElementById('terms-chk').checked;
+      const privacyChecked = document.getElementById('privacy-chk').checked;
+
+      // We need to check balance again or just check if it's currently enabled based on balance
+      // A simpler way is to trigger balance check again or just check the current price
+      const price = parseFloat(order?.plan_price || 0);
+      getBalance().then(bal => applyBalance(bal, price));
+    }
+
+    async function init() {
+      order = JSON.parse(localStorage.getItem('pending_order') || 'null');
+      if (!order) { window.location.href = 'index.html'; return; }
+
+      const T = (order.plan_type || '').toUpperCase();
+      const price = parseFloat(order.plan_price);
+
+      // Sidebar
+      document.getElementById('sum-plan').textContent = order.plan_name;
+      document.getElementById('sum-price').textContent = `$${price.toFixed(2)}`;
+      document.getElementById('sum-total').textContent = `$${price.toFixed(2)} USD`;
+
+      // Order review
+      document.getElementById('or-plan').textContent = order.plan_name;
+      document.getElementById('or-type').textContent = T;
+      document.getElementById('or-billing').textContent = order.billing_cycle || 'Monthly';
+      document.getElementById('or-region').textContent = 'Eygelshoven, Niederlande';
+
+      if (T === 'GAME') {
+        document.getElementById('or-os-row').style.display = 'none';
+        document.getElementById('or-host').textContent = order.server_name || order.hostname || '—';
+      } else {
+        document.getElementById('or-os').textContent = order.os_name || '—';
+        document.getElementById('or-host').textContent = order.hostname || '—';
+        document.getElementById('sum-os-row').style.display = 'flex';
+        document.getElementById('sum-os').textContent = order.os_name || '—';
+      }
+
+      const bal = await getBalance();
+      applyBalance(bal, price);
+
+      const tok = localStorage.getItem('authToken');
+      if (tok) {
+        document.getElementById('billing-card').style.display = 'none';
+        document.getElementById('login-card').style.display = 'none';
+      } else {
+        document.getElementById('billing-card').style.display = 'none';
+        document.getElementById('login-card').style.display = 'block';
+        document.getElementById('complete-btn').disabled = true;
+        document.getElementById('complete-btn').textContent = 'Login Required';
+      }
+
+      // Prefill user
+      const u = JSON.parse(localStorage.getItem('user') || 'null');
+      if (u) {
+        if (u.email) document.getElementById('email').value = u.email;
+        if (u.first_name) document.getElementById('fname').value = u.first_name;
+        if (u.last_name) document.getElementById('lname').value = u.last_name;
+      }
+
+      document.getElementById('terms-chk').addEventListener('change', updateButtonState);
+      document.getElementById('privacy-chk').addEventListener('change', updateButtonState);
+
+      document.getElementById('complete-btn').addEventListener('click', async () => {
+        if (!localStorage.getItem('authToken')) { alert('Please log in to complete your order.'); window.location.href = 'my-account.html'; return; }
+        const btn = document.getElementById('complete-btn');
+        btn.innerHTML = '<span class="sp"></span> Processing…';
+        btn.disabled = true;
+        try {
+          const submitOrder = (extra = {}) => window.Host1TopApi.post('/api/user/checkout', {
+            ...order,
+            terms: document.getElementById('terms-chk').checked,
+            privacy: document.getElementById('privacy-chk').checked,
+            ...extra
+          }, { requiresCsrf: false });
+          let d;
+          try {
+            d = await submitOrder();
+          } catch (error) {
+            if (error.status === 409 && error.details?.details?.requires_confirmation) {
+              const suggestion = error.details.details.suggestion || {};
+              const confirmed = window.confirm(
+                `No node currently fits your exact request.\n\nSuggested node: ${suggestion.name || error.details.details.suggested_node_id || 'Best available'}\n` +
+                `CPU shortfall: ${suggestion.cpuGap || 0}\nRAM shortfall: ${suggestion.memoryGap || 0} MB\nDisk shortfall: ${suggestion.diskGap || 0} MB\n\n` +
+                'Continue with the closest available downgrade?'
+              );
+              if (!confirmed) {
+                btn.innerHTML = 'Complete Order';
+                btn.disabled = false;
+                return;
+              }
+              d = await submitOrder({ allow_allocator_downgrade: true });
+            } else {
+              throw error;
+            }
+          }
+          if (d.success) {
+            localStorage.removeItem('pending_order');
+            const msg = d.message || (T === 'GAME'
+              ? 'Your game server is being deployed. Panel credentials will be emailed to you shortly.'
+              : T === 'RDP'
+                ? 'Your Windows RDP server is being provisioned. Login details will arrive by email.'
+                : 'Your VPS is being provisioned. It should be online within 2 minutes.');
+            document.getElementById('success-msg').textContent = msg;
+            document.getElementById('success-order-id').textContent = d.order_id ? `Order ID: ${d.order_id}` : '';
+            document.getElementById('success-meta').textContent = '';
+
+            if (d.service_uuid) {
+              const panelUrl = (T === 'GAME' ? 'game-panel.html' : 'vps-panel.html') + '?uuid=' + d.service_uuid;
+              const btn = document.getElementById('panel-btn');
+              btn.onclick = () => window.location.href = panelUrl;
+              btn.textContent = 'Go to Control Panel →';
+            }
+            if (T === 'GAME' && d.sftp) {
+              document.getElementById('success-meta').textContent =
+                `Server UUID: ${d.service_uuid || 'Pending'}\nSFTP Host: ${d.sftp.host}:${d.sftp.port}\nSFTP User: ${d.sftp.username || 'Pending'}${d.sftp.password ? `\nTemporary Password: ${d.sftp.password}` : ''}`;
+            }
+
+            document.getElementById('success-ov').classList.add('show');
+          } else {
+            alert(d.error || 'Checkout failed. Please try again.');
+            btn.innerHTML = 'Complete Order';
+            btn.disabled = false;
+            const nb = await getBalance();
+            applyBalance(nb, price);
+          }
+        } catch (error) {
+          alert(error.message || 'Connection error. Please try again.');
+          btn.innerHTML = 'Complete Order';
+          btn.disabled = false;
+        }
+      });
+    }
+
+    document.querySelectorAll('.pay-opt').forEach(o => {
+      o.addEventListener('click', () => {
+        document.querySelectorAll('.pay-opt').forEach(x => x.classList.remove('sel'));
+        o.classList.add('sel');
+        o.querySelector('input[type=radio]').checked = true;
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+  <script src="header-loader.js"></script>
+</body>
+
+</html>
