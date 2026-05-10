@@ -1,8 +1,8 @@
 const app = require('./server');
 
-const PORT = process.env.PORT || 3001;
+// Vercel automatically provides the correct port
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server and Frontend are running simultaneously on port ${PORT}`);
-    console.log(`🌍 Access the website at http://localhost:${PORT}`);
+    console.log(`🚀 Server running on Vercel port ${PORT}`);
 });
