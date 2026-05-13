@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voucher Control - HOST1TOP</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #89cf00;
+      --accent-soft: rgba(137, 207, 0, 0.1);
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --radius: 14px;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    .page-shell {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .page-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .page-header p {
+      margin: 0.4rem 0 0;
+      color: var(--text-secondary);
+    }
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-primary);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0f172a;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card,
+    .panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .stat-card {
+      padding: 1.25rem;
+    }
+    .stat-label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .panel {
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .panel-head p {
+      margin: 0.35rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 1rem 1.2rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      background: #f8fafc;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .badge-active { background: #dcfce7; color: var(--success); }
+    .badge-paused { background: #fee2e2; color: var(--danger); }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .muted {
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+    }
+    .row-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 1000;
+    }
+    .modal {
+      width: min(920px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
+    }
+    .modal-head, .modal-body, .modal-foot {
+      padding: 1.4rem 1.6rem;
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-body {
+      display: grid;
+      gap: 1rem;
+    }
+    .modal-foot {
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .form-field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 0.95rem;
+      font: inherit;
+    }
+    .form-field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .status-banner {
+      display: none;
+      margin-bottom: 1rem;
+      padding: 0.95rem 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .status-banner.visible { display: block; }
+    .status-banner.success { background: #ecfdf3; color: #166534; border: 1px solid #86efac; }
+    .status-banner.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    @media (max-width: 1120px) {
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .page-shell { padding: 1rem; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .stats-grid, .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div id="page-status" class="status-banner" role="status" aria-live="polite"></div>
+
+    <header class="page-header">
+      <div>
+        <h1>Voucher Control</h1>
+        <p>Create, monitor, and audit cashbox vouchers with full usage tracking.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn" href="admin.html"><i data-lucide="arrow-left"></i>Back to Admin</a>
+        <button class="btn" id="refresh-vouchers"><i data-lucide="refresh-cw"></i>Refresh</button>
+        <button class="btn btn-primary" id="open-create-modal"><i data-lucide="plus"></i>Create Vouchers</button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card"><span class="stat-label">Total Vouchers</span><div class="stat-value" id="stat-total-vouchers">0</div></div>
+      <div class="stat-card"><span class="stat-label">Active Codes</span><div class="stat-value" id="stat-active-vouchers">0</div></div>
+      <div class="stat-card"><span class="stat-label">Expired Codes</span><div class="stat-value" id="stat-expired-vouchers">0</div></div>
+      <div class="stat-card"><span class="stat-label">Total Redemptions</span><div class="stat-value" id="stat-total-redemptions">0</div></div>
+      <div class="stat-card"><span class="stat-label">Utilization Rate</span><div class="stat-value" id="stat-utilization-rate">0%</div></div>
+    </section>
+
+    <section class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-head">
+        <div>
+          <h2>Performance Metrics</h2>
+          <p>High-level reporting for voucher output and redeemed value.</p>
+        </div>
+        <div style="font-size:1.35rem; font-weight:800;" id="stat-redeemed-value">$0.00</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Voucher Inventory</h2>
+          <p>Usage caps, expiration state, and audit actions for each code.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Value</th>
+              <th>Usage</th>
+              <th>Expiry</th>
+              <th>Performance</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="voucher-table-body">
+            <tr><td colspan="7" class="muted" style="text-align:center;">Loading vouchers...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay"></div>
+
+  <script src="admin-vouchers.js"></script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+    .settings-section {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin-bottom: 3rem;
+    }
+    .settings-section h2 {
+      margin: 0 0 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .settings-section h2 svg { color: var(--accent-dark); }
+    .settings-panel {
+      background: color-mix(in srgb, var(--surface-elevated) 96%, transparent);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: 0 20px 45px color-mix(in srgb, var(--shadow) 18%, transparent);
+    }
+    
+    .two-factor-card {
+      background: color-mix(in srgb, var(--surface-alt) 92%, transparent);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface-elevated) 65%, transparent);
+    }
+    
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 4px; bottom: 4px;
+      background-color: var(--surface-elevated);
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px color-mix(in srgb, var(--shadow) 32%, transparent);
+    }
+    input:checked + .slider { background-color: var(--accent-dark); }
+    input:checked + .slider:before { transform: translateX(24px); }
+  </style>
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <main class="dashboard-page">
+    <div class="container dashboard-grid">
+      <aside class="dash-sidebar">
+        <div class="sidebar-balance">
+          <div class="label">Available Balance</div>
+          <div class="amount" id="sidebar-balance-amount">$0.00 USD</div>
+        </div>
+        <a href="client-area.html"><svg class="icon-use" width="18" height="18"><use href="#i-layers"/></svg> Dashboard</a>
+        <a href="my-services.html"><svg class="icon-use" width="18" height="18"><use href="#i-server"/></svg> My Services</a>
+        <a href="invoices.html"><svg class="icon-use" width="18" height="18"><use href="#i-cube"/></svg> Invoices</a>
+        <a href="cashbox.html"><svg class="icon-use" width="18" height="18"><use href="#i-activity"/></svg> Cashbox</a>
+        <a href="tickets.html"><svg class="icon-use" width="18" height="18"><use href="#i-support"/></svg> Support Tickets</a>
+        <a href="profile.html" class="active"><svg class="icon-use" width="18" height="18"><use href="#i-users"/></svg> Profile</a>
+        <div style="flex:1;"></div>
+        <button onclick="logout()" class="dash-sidebar-logout" style="border:none; background:none; text-align:left; cursor:pointer; display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; color:var(--muted); font-weight:600; width:100%;">
+          <svg class="icon-use" width="18" height="18"><use href="#i-chevron-left"/></svg> Logout
+        </button>
+      </aside>
+      
+      <div class="dash-content">
+        <header class="panel-header">
+          <h1>Account Settings</h1>
+          <p>Manage your identity, personal information, and security preferences.</p>
+        </header>
+
+        <form id="profile-form">
+          <div class="profile-grid">
+            <!-- Basic Information -->
+            <div class="settings-section settings-panel">
+              <h2><svg class="icon-use" width="20" height="20"><use href="#i-users"/></svg> Personal Details</h2>
+              <div class="profile-grid" style="gap: 1rem;">
+                <div class="input-group">
+                  <label>First Name</label>
+                  <input type="text" name="first_name" id="first_name" placeholder="John" />
+                </div>
+                <div class="input-group">
+                  <label>Last Name</label>
+                  <input type="text" name="last_name" id="last_name" placeholder="Doe" />
+                </div>
+              </div>
+              <div class="input-group" style="margin-top: 1rem;">
+                <label>Email Address</label>
+                <input type="email" id="email" disabled style="background: var(--input-disabled-bg); cursor: not-allowed;" />
+              </div>
+              <div class="input-group" style="margin-top: 1rem;">
+                <label>Phone Number</label>
+                <input type="text" name="phone" id="phone" placeholder="+1 (555) 000-0000" />
+              </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="settings-section settings-panel">
+              <h2><svg class="icon-use" width="20" height="20"><use href="#i-layers"/></svg> Security & Auth</h2>
+              <div class="two-factor-card" style="margin-bottom: 1.5rem;">
+                <div>
+                  <div style="font-weight: 800; font-size: 0.95rem;">Two-Factor Authentication</div>
+                  <div style="font-size: 0.8rem; color: var(--muted);">Adds an extra layer of security to your account.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" name="two_factor_enabled" id="two_factor_enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              
+              <div class="input-group">
+                <label>Current Password</label>
+                <input type="password" name="current_password" id="current_password" placeholder="Required for password changes" />
+              </div>
+              <div class="input-group" style="margin-top: 1rem;">
+                <label>New Password</label>
+                <input type="password" name="new_password" id="new_password" placeholder="Leave blank to keep current" />
+              </div>
+            </div>
+          </div>
+
+          <div id="form-feedback" style="margin-bottom: 1.5rem; display: none; padding: 1rem; border-radius: var(--radius);"></div>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <button type="submit" id="save-btn" class="btn btn--primary" style="padding: 0.85rem 2.5rem;">Save All Changes</button>
+          </div>
+        </form>
+
+        <section class="settings-section settings-panel" id="notification-settings" style="margin-top: 3rem;">
+          <h2><svg class="icon-use" width="20" height="20"><use href="#i-support"/></svg> Notification Preferences</h2>
+          <div class="profile-grid">
+            <div class="two-factor-card">
+              <div>
+                <div style="font-weight: 800; font-size: 0.95rem;">Browser notifications</div>
+                <div style="font-size: 0.8rem; color: var(--muted);">Show desktop alerts when tickets get new replies.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif_browser_enabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="two-factor-card">
+              <div>
+                <div style="font-weight: 800; font-size: 0.95rem;">In-app notifications</div>
+                <div style="font-size: 0.8rem; color: var(--muted);">Keep ticket updates in the notification center and badge.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif_in_app_enabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="two-factor-card" style="margin-top: 1rem;">
+            <div>
+              <div style="font-weight: 800; font-size: 0.95rem;">Email notifications</div>
+              <div style="font-size: 0.8rem; color: var(--muted);">Send ticket reply alerts to your account email.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="notif_email_enabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div style="margin-top: 1rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="save-notification-prefs" class="btn btn--primary">Save Notification Preferences</button>
+            <div id="notification-pref-feedback" style="display:none; padding:0.85rem 1rem; border-radius:var(--radius);"></div>
+          </div>
+          <div class="settings-section" style="margin-top: 2rem; margin-bottom: 0;">
+            <h2 style="font-size:1rem;">Notification History</h2>
+            <div id="profile-notification-history" class="two-factor-card" style="display:block;">
+              <div style="color: var(--muted);">Loading notifications...</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function fetchProfile() {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        window.location.href = 'my-account.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/auth/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch profile');
+
+        const data = await response.json();
+        const user = data.user;
+        
+        document.getElementById('email').value = user.email;
+        document.getElementById('first_name').value = user.first_name || '';
+        document.getElementById('last_name').value = user.last_name || '';
+        document.getElementById('phone').value = user.phone || '';
+        document.getElementById('two_factor_enabled').checked = !!user.two_factor_enabled;
+        
+        document.querySelector('#balance-display span').textContent = `$${user.balance} USD`;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    async function loadNotificationPreferences() {
+      if (!window.Host1TopExperience) return;
+      const preferences = await window.Host1TopExperience.fetchNotificationPreferences();
+      if (!preferences) return;
+      document.getElementById('notif_browser_enabled').checked = !!preferences.browser_enabled;
+      document.getElementById('notif_in_app_enabled').checked = !!preferences.in_app_enabled;
+      document.getElementById('notif_email_enabled').checked = !!preferences.email_enabled;
+    }
+
+    async function loadNotificationHistory() {
+      if (!window.Host1TopExperience) return;
+      const result = await window.Host1TopExperience.fetchNotifications();
+      const container = document.getElementById('profile-notification-history');
+      if (!container) return;
+      if (!result?.notifications?.length) {
+        container.innerHTML = '<div style="color: var(--muted);">No ticket notifications yet.</div>';
+        return;
+      }
+      container.innerHTML = result.notifications.map((item) => `
+        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border);">
+          <div style="display:flex; justify-content:space-between; gap:1rem; align-items:flex-start;">
+            <div>
+              <div style="font-weight:800;">${item.title}</div>
+              <div style="color:var(--muted); margin-top:0.25rem;">${item.message}</div>
+            </div>
+            <div style="font-size:0.75rem; color:var(--muted); white-space:nowrap;">${new Date(item.created_at).toLocaleString()}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function initializeNotificationSettings() {
+      for (let attempt = 0; attempt < 10; attempt += 1) {
+        if (window.Host1TopExperience) break;
+        await new Promise((resolve) => setTimeout(resolve, 200));
+      }
+      if (!window.Host1TopExperience) return;
+      await loadNotificationPreferences();
+      await loadNotificationHistory();
+    }
+
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const btn = document.getElementById('save-btn');
+      const feedback = document.getElementById('form-feedback');
+      const token = localStorage.getItem('authToken');
+      
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Handle checkbox manually as FormData can be tricky with unchecked boxes
+      data.two_factor_enabled = document.getElementById('two_factor_enabled').checked;
+
+      btn.disabled = true;
+      btn.textContent = 'Saving Changes...';
+      feedback.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/user/profile', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          feedback.innerHTML = 'Account updated successfully!';
+          feedback.style.background = '#dcfce7';
+          feedback.style.color = '#166534';
+          feedback.style.display = 'block';
+          
+          // Clear password fields
+          document.getElementById('current_password').value = '';
+          document.getElementById('new_password').value = '';
+        } else {
+          feedback.innerHTML = result.error || 'Failed to update profile';
+          feedback.style.background = '#fee2e2';
+          feedback.style.color = '#991b1b';
+          feedback.style.display = 'block';
+        }
+      } catch (err) {
+        feedback.innerHTML = 'Connection error. Please try again.';
+        feedback.style.background = '#fee2e2';
+        feedback.style.color = '#991b1b';
+        feedback.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save All Changes';
+        window.scrollTo({ top: feedback.offsetTop - 100, behavior: 'smooth' });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', fetchProfile);
+    document.addEventListener('DOMContentLoaded', initializeNotificationSettings);
+
+    document.getElementById('save-notification-prefs').addEventListener('click', async () => {
+      const feedback = document.getElementById('notification-pref-feedback');
+      try {
+        await window.Host1TopExperience.saveNotificationPreferences({
+          browser_enabled: document.getElementById('notif_browser_enabled').checked,
+          in_app_enabled: document.getElementById('notif_in_app_enabled').checked,
+          email_enabled: document.getElementById('notif_email_enabled').checked
+        });
+        feedback.textContent = 'Notification preferences updated successfully.';
+        feedback.style.display = 'block';
+        feedback.style.background = '#dcfce7';
+        feedback.style.color = '#166534';
+      } catch (error) {
+        feedback.textContent = error.message || 'Failed to update notification preferences.';
+        feedback.style.display = 'block';
+        feedback.style.background = '#fee2e2';
+        feedback.style.color = '#991b1b';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Servers - HOST1TOP</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #89cf00;
+      --accent-soft: rgba(137, 207, 0, 0.1);
+      --danger: #ef4444;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --radius: 14px;
+      --shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .topbar p {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+      max-width: 720px;
+    }
+    .topbar-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-danger {
+      color: var(--danger);
+      border-color: #fecaca;
+      background: #fff1f2;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .card, .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card {
+      padding: 1.25rem;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .panel-head {
+      padding: 1.2rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .panel-head p {
+      margin: 0.3rem 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+    th {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: #f8fafc;
+    }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.28rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .badge-active { background: #dcfce7; color: var(--success); }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: var(--danger); }
+    .row-actions {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .status-banner {
+      display: none;
+      margin-bottom: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .status-banner.visible { display: block; }
+    .status-banner.success { background: #ecfdf3; border: 1px solid #86efac; color: #166534; }
+    .status-banner.error { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 1000;
+    }
+    .modal {
+      width: min(980px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 28px 56px rgba(15, 23, 42, 0.22);
+    }
+    .modal-head, .modal-body, .modal-foot {
+      padding: 1.3rem 1.5rem;
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-body {
+      display: grid;
+      gap: 1rem;
+    }
+    .modal-foot {
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.45rem;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.82rem 0.95rem;
+      font: inherit;
+    }
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .console {
+      background: #020617;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      min-height: 260px;
+      white-space: pre-wrap;
+      overflow: auto;
+    }
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .shell { padding: 1rem; }
+      .topbar { flex-direction: column; }
+      .grid, .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div id="status-banner" class="status-banner" role="status" aria-live="polite"></div>
+
+    <header class="topbar">
+      <div>
+        <h1>Game Servers</h1>
+        <p>Provision, start, stop, restart, delete, and inspect Pterodactyl-backed game servers from a dedicated admin workflow.</p>
+      </div>
+      <div class="topbar-actions">
+        <a href="admin.html" class="btn"><i data-lucide="arrow-left"></i>Back to Admin</a>
+        <button class="btn" id="refresh-page"><i data-lucide="refresh-cw"></i>Refresh</button>
+        <button class="btn btn-primary" id="open-provision-modal"><i data-lucide="plus"></i>Provision Server</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card"><span class="stat-label">Feature Flag</span><div class="stat-value" id="stat-enabled">Off</div></div>
+      <div class="card"><span class="stat-label">Total Servers</span><div class="stat-value" id="stat-total">0</div></div>
+      <div class="card"><span class="stat-label">Active Servers</span><div class="stat-value" id="stat-active">0</div></div>
+      <div class="card"><span class="stat-label">Suspended / Pending</span><div class="stat-value" id="stat-pending">0</div></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Server Inventory</h2>
+          <p>Use row actions for individual control or select multiple rows for bulk operations.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="bulk-start">Mass Start</button>
+          <button class="btn" id="bulk-stop">Mass Stop</button>
+          <button class="btn btn-danger" id="bulk-delete">Mass Delete</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="select-all-servers" /></th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Node</th>
+              <th>Egg</th>
+              <th>Owner</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="servers-body">
+            <tr><td colspan="8" class="muted" style="text-align:center;">Loading game servers...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay"></div>
+
+  <script src="admin-game-servers.js"></script>
+</body>
+</html>

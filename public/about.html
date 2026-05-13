@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About us — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .about-shell {
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 35%),
+        linear-gradient(180deg, color-mix(in srgb, var(--hero-bg) 92%, transparent) 0%, var(--bg) 100%);
+    }
+    .about-hero {
+      padding: clamp(5rem, 9vw, 8rem) 0 4rem;
+      color: #fff;
+    }
+    .about-hero__grid,
+    .team-grid,
+    .about-facts,
+    .value-grid,
+    .partner-strip {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .about-hero__grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+      align-items: end;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      margin-bottom: 1.25rem;
+    }
+    .about-hero h1 {
+      margin: 0 0 1.25rem;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+    .about-hero h1 span {
+      color: var(--accent);
+      display: block;
+    }
+    .about-hero p {
+      max-width: 42rem;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 1.75rem;
+    }
+    .about-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+    .about-hero-card,
+    .story-card,
+    .team-card,
+    .principle-card {
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      box-shadow: 0 18px 50px var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .about-hero-card {
+      padding: 1.5rem;
+      color: var(--text);
+    }
+    .about-photo-stack {
+      display: grid;
+      gap: 1rem;
+    }
+    .about-photo {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.18);
+      min-height: 17rem;
+      position: relative;
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .about-photo__caption {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 1rem;
+      background: rgba(9, 17, 31, 0.68);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .about-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1rem;
+    }
+    .fact {
+      padding: 1rem;
+      border-radius: 1rem;
+      background: var(--surface-alt, #f8fafc);
+      border: 1px solid var(--border);
+    }
+    .fact strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 0.2rem;
+    }
+    .story-section,
+    .team-section,
+    .principles-section,
+    .value-section,
+    .partner-section {
+      padding: 5rem 0;
+    }
+    .section-heading {
+      max-width: 46rem;
+      margin-bottom: 2rem;
+    }
+    .section-heading h2 {
+      margin: 0.55rem 0 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+    .section-heading p {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+    .story-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: 1.5rem;
+    }
+    .story-card {
+      padding: 2rem;
+    }
+    .story-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .story-card--accent {
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+    }
+    .team-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .team-card {
+      overflow: hidden;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+    .team-card:hover {
+      transform: translateY(-8px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+      box-shadow: 0 24px 60px var(--shadow);
+    }
+    .team-card__media {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 4.2;
+      background:
+        radial-gradient(circle at top, color-mix(in srgb, var(--accent) 22%, transparent), transparent 48%),
+        linear-gradient(180deg, color-mix(in srgb, var(--surface-alt, #f8fafc) 88%, transparent), var(--surface));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .team-avatar {
+      width: 8.5rem;
+      height: 8.5rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 24%, var(--surface)), var(--surface));
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+      box-shadow: 0 18px 48px var(--shadow);
+      color: var(--accent-dark);
+    }
+    .team-avatar svg {
+      width: 4rem;
+      height: 4rem;
+    }
+    .team-card__body {
+      padding: 1.5rem;
+    }
+    .team-card__body h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+    .team-card__title {
+      color: var(--accent-dark);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.74rem;
+      margin-top: 0.45rem;
+    }
+    .team-card__body p {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .expertise-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.15rem;
+    }
+    .expertise-list span {
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: var(--surface-alt, #f8fafc);
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .team-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.2rem;
+    }
+    .team-links a {
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .team-links a:hover,
+    .team-links a:focus-visible {
+      color: var(--accent-dark);
+      text-decoration: none;
+    }
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+    .value-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .value-card {
+      padding: 1.8rem;
+      border-radius: 1.4rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 18px 44px var(--shadow);
+    }
+    .value-card strong {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-size: 1.05rem;
+    }
+    .value-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .partner-strip {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: center;
+      padding: 1.25rem;
+      border-radius: 1.4rem;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow: 0 18px 44px var(--shadow);
+    }
+    .partner-strip img {
+      max-width: 100%;
+      max-height: 2rem;
+      margin: 0 auto;
+      opacity: 0.72;
+      filter: grayscale(1);
+    }
+    .principle-card {
+      padding: 1.8rem;
+    }
+    .principle-card h3 {
+      margin: 1rem 0 0.75rem;
+      font-size: 1.12rem;
+    }
+    .principle-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .principle-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+      color: var(--accent-dark);
+    }
+    @media (max-width: 980px) {
+      .about-hero__grid,
+      .story-layout,
+      .team-grid,
+      .principles-grid,
+      .value-grid,
+      .partner-strip {
+        grid-template-columns: 1fr;
+      }
+      .about-facts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-root"></div>
+  <main class="about-shell">
+    <section class="about-hero">
+      <div class="container about-hero__grid">
+        <div>
+          <span class="eyebrow">About HOST1TOP</span>
+          <h1>We Build Hosting <span>That Teams Can Trust</span></h1>
+          <p>HOST1TOP pairs performance infrastructure with visible support, practical automation, and clear operations. We design for teams that need reliable game hosting, cloud workloads, and faster response during incidents, not vague promises after the fact.</p>
+          <div class="about-cta-group">
+            <a href="/plans/index.html" class="btn btn--header-accent">Explore All Plans</a>
+            <a href="mailto:support@host1top.com" class="btn btn--header-outline">Talk to the Team</a>
+          </div>
+        </div>
+        <div class="about-photo-stack" aria-label="HOST1TOP operations">
+          <figure class="about-photo">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="High-performance server hardware in a data center rack" />
+            <figcaption class="about-photo__caption">Operational infrastructure built around performance density, redundancy, and clean routing for production hosting.</figcaption>
+          </figure>
+          <aside class="about-hero-card" aria-label="HOST1TOP highlights">
+            <div class="eyebrow" style="margin-bottom: 0.75rem;">Snapshot</div>
+            <h2 style="margin:0; font-size:1.6rem; letter-spacing:-0.03em;">Fast provisioning, practical support, and game-first operations.</h2>
+            <div class="about-facts">
+              <div class="fact">
+                <strong>24/7</strong>
+                <span>Support visibility for incidents and ticket follow-up</span>
+              </div>
+              <div class="fact">
+                <strong>Game + Cloud</strong>
+                <span>Panels and infrastructure tuned for Minecraft, SA-MP, MTA and VPS/RDP</span>
+              </div>
+              <div class="fact">
+                <strong>Security-first</strong>
+                <span>DDoS-aware routing, account controls, and operational recovery paths</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Our Story</span>
+          <h2>Small team mindset, infrastructure-grade discipline.</h2>
+          <p>We design HOST1TOP around clarity, response time, and operational ownership. That means transparent product limits, stronger defaults, and systems that keep customers in control of their files, servers, and support history.</p>
+        </div>
+        <div class="story-layout">
+          <article class="story-card story-card--accent">
+            <p>HOST1TOP grew from real hosting operations, not from a placeholder brand shell. The focus has always been the same: reliable game environments, stable cloud capacity, and support workflows that make customers feel informed instead of blocked. We believe infrastructure should be understandable, responsive, and safe under pressure.</p>
+          </article>
+          <article class="story-card">
+            <p>Our roadmap prioritizes practical improvements that matter every day: better panel workflows, clearer service telemetry, stronger operational notifications, and a design system that works well on phones, laptops, and admin workstations alike.</p>
+            <div style="margin-top:1.5rem; border-radius:1rem; overflow:hidden; border:1px solid var(--border);">
+              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80" alt="Network operations workspace with multiple monitoring displays" style="width:100%; display:block; max-height:240px; object-fit:cover;" />
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="value-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Why Customers Stay</span>
+          <h2>Clear value propositions that reduce friction and build confidence.</h2>
+          <p>We focus on predictable performance, visible support workflows, and hosting choices that help customers scale without guessing.</p>
+        </div>
+        <div class="value-grid">
+          <article class="value-card">
+            <strong>Operational clarity</strong>
+            <p>Customers can see service status, support history, and panel details without waiting for manual updates.</p>
+          </article>
+          <article class="value-card">
+            <strong>Performance-first hosting</strong>
+            <p>From game nodes to cloud instances, we prioritize high-frequency CPUs, NVMe storage, and low-latency routing.</p>
+          </article>
+          <article class="value-card">
+            <strong>Trust through response</strong>
+            <p>Ticket notifications, structured workflows, and real human follow-up keep incidents actionable instead of opaque.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="partner-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Infrastructure Stack</span>
+          <h2>Built on proven hardware partnerships.</h2>
+          <p>Our platform story is backed by recognizable infrastructure components and a stack chosen for reliability, speed, and operational consistency.</p>
+        </div>
+        <div class="partner-strip" aria-label="Infrastructure partner badges">
+          <img src="/img/amd.png" alt="AMD partner badge" />
+          <img src="/img/intel.png" alt="Intel partner badge" />
+          <img src="/img/samsung.png" alt="Samsung storage badge" />
+          <img src="/img/dell.png" alt="Dell server badge" />
+          <img src="/img/asr.png" alt="ASRock partner badge" />
+        </div>
+      </div>
+    </section>
+
+    <section class="team-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Our Team</span>
+          <h2>People behind the infrastructure.</h2>
+          <p>The HOST1TOP leadership team combines platform operations, network thinking, customer support, and hands-on product development. We keep the leadership identities real and avoid using misleading stock portraits for named team members.</p>
+        </div>
+        <div class="team-grid">
+          <article class="team-card">
+            <div class="team-card__media">
+              <div class="team-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                  <circle cx="12" cy="8" r="4"></circle>
+                  <path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="team-card__body">
+              <h3>Ayoub Chaibi</h3>
+              <div class="team-card__title">C.E.O</div>
+              <p>Leads HOST1TOP’s technical direction with a strong focus on systems engineering, resilient networking, and product execution across hosting workflows.</p>
+              <div class="expertise-list">
+                <span>IT Engineer</span>
+                <span>Network Engineer</span>
+                <span>DDoS Protection Leader</span>
+                <span>Web Developer</span>
+              </div>
+              <div class="team-links">
+                <a href="mailto:ayoub@host1top.com">Email</a>
+                <a href="https://discord.gg/5db3SFqcFd" target="_blank" rel="noopener">Discord</a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <div class="team-card__media">
+              <div class="team-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                  <circle cx="12" cy="8" r="4"></circle>
+                  <path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="team-card__body">
+              <h3>Brahim BenMagha</h3>
+              <div class="team-card__title">C.E.O</div>
+              <p>Owns panel-facing customer experience, first-line support motion, and the bridge between customer requests and technical implementation.</p>
+              <div class="expertise-list">
+                <span>Game Panel Officer</span>
+                <span>1st Level Support</span>
+                <span>Web Developer</span>
+              </div>
+              <div class="team-links">
+                <a href="mailto:brahim@host1top.com">Email</a>
+                <a href="https://discord.gg/5db3SFqcFd" target="_blank" rel="noopener">Discord</a>
+                <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <div class="team-card__media">
+              <div class="team-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                  <circle cx="12" cy="8" r="4"></circle>
+                  <path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="team-card__body">
+              <h3>Walid w</h3>
+              <div class="team-card__title">C.E.O / Founder</div>
+              <p>Shapes long-term platform direction, brand foundation, and the service model that ties together cloud hosting, game operations, and customer trust.</p>
+              <div class="expertise-list">
+                <span>Founder</span>
+                <span>Strategy</span>
+                <span>Operations</span>
+              </div>
+              <div class="team-links">
+                <a href="mailto:walid@host1top.com">Email</a>
+                <a href="https://discord.gg/5db3SFqcFd" target="_blank" rel="noopener">Discord</a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="principles-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">How We Work</span>
+          <h2>Design principles that guide the product experience.</h2>
+          <p>We treat support, visibility, and operational control as first-class features, not afterthoughts.</p>
+        </div>
+        <div class="principles-grid">
+          <article class="principle-card">
+            <div class="principle-icon">01</div>
+            <h3>Clear status over vague reassurance</h3>
+            <p>We prefer visible state, actionable ticketing, and timely updates over generic “please wait” patterns.</p>
+          </article>
+          <article class="principle-card">
+            <div class="principle-icon">02</div>
+            <h3>Access should stay in the customer’s hands</h3>
+            <p>From file access to ticket history and panel workflows, we build around ownership and self-service where it helps.</p>
+          </article>
+          <article class="principle-card">
+            <div class="principle-icon">03</div>
+            <h3>Responsive support is part of infrastructure</h3>
+            <p>Reliable platforms need reliable communication, which is why ticket notifications, history, and response visibility matter.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="footer-root"></div>
+  <script src="header-loader.js"></script>
+</body>
+</html>

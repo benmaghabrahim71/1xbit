@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VPS Control Panel — HOST1TOP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ── DASHBOARD LAYOUT OVERRIDES ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dash-sidebar {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .dash-sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .dash-sidebar a:hover {
+      background: #f5f5f5;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .dash-sidebar a.active {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .dash-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .vps-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .vps-header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .status-badge--vps {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: #f5f5f5;
+      border: 1px solid var(--border);
+    }
+
+    /* ── WIDGETS ── */
+    .vps-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .vps-stat-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: left;
+    }
+
+    .vps-stat-card h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .vps-stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .vps-stat-card .detail {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── TABS & CONTENT ── */
+    .vps-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ── BUTTONS ── */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-vps {
+      flex: 1;
+      padding: 0.85rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-vps:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .btn-vps--start {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    .btn-vps--stop {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    .btn-vps--restart {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #075985;
+    }
+
+    /* ── FORMS ── */
+    .vps-form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .vps-form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .vps-form-group input,
+    .vps-form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #fcfcfc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+    }
+
+    /* ── GRAPHS ── */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .graph-box {
+      height: 300px;
+      position: relative;
+      background: #fcfcfc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* ── VNC ── */
+    #vnc-frame {
+      width: 100%;
+      height: 500px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #000;
+    }
+  </style>
+
+  <meta name="description" content="HOST1TOP — Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="keywords" content="hosting, vps, rdp, game server, minecraft hosting, samp hosting, cloud hosting, 10Gbps, host1top, premium hosting" />
+  <meta name="author" content="HOST1TOP" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://host1top.com/" />
+  <meta property="og:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta property="og:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta property="og:image" content="https://host1top.com/img/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://host1top.com/" />
+  <meta name="twitter:title" content="HOST1TOP — Integrity, Efficiency, and Speed 10Gb/s" />
+  <meta name="twitter:description" content="Premium 10Gb/s Game & Cloud Hosting. SA-MP, MTA:SA, Minecraft, RDP and VPS hosting with 99.9% uptime." />
+  <meta name="twitter:image" content="https://host1top.com/img/og-image.jpg" />
+  <link rel="canonical" href="https://host1top.com/" />
+</head>
+
+<body class="dashboard-page">
+  <div id="header-root"></div>
+
+  <main class="container dashboard-grid">
+    <aside class="dash-sidebar">
+      <div style="padding: 0 1rem 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+        <div
+          style="font-size:0.7rem; text-transform:uppercase; color:var(--muted); font-weight:800; letter-spacing:0.1em; margin-bottom:0.25rem;">
+          Server Management</div>
+        <div id="sidebar-hostname" style="font-weight:900; font-size:1rem; word-break:break-all;">Loading...</div>
+      </div>
+
+      <a href="#" class="active" onclick="switchTab('overview')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-layers" />
+        </svg> Overview
+      </a>
+      <a href="#" onclick="switchTab('analytics')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-activity" />
+        </svg> Analytics
+      </a>
+      <a href="#" onclick="switchTab('network')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-globe" />
+        </svg> Network & PTR
+      </a>
+      <a href="#" onclick="switchTab('reinstall')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-refresh-cw" />
+        </svg> Reinstall OS
+      </a>
+      <a href="#" onclick="switchTab('console')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-terminal" />
+        </svg> VNC Console
+      </a>
+      <a href="#" onclick="switchTab('settings')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-settings" />
+        </svg> Settings
+      </a>
+      <a href="#" onclick="switchTab('renew')">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-calendar" />
+        </svg> Renew
+      </a>
+
+      <div style="flex:1; min-height: 2rem;"></div>
+      <a href="client-area.html" style="border-top:1px solid var(--border); padding-top:1rem; color:var(--muted);">
+        <svg class="icon-use" width="18" height="18">
+          <use href="#i-chevron-left" />
+        </svg> Back to Dashboard
+      </a>
+    </aside>
+
+    <div class="dash-content">
+      <header class="vps-header">
+        <div>
+          <h1 id="vps-title">VPS Management</h1>
+          <p id="vps-subtitle" style="color:var(--muted); margin:0.25rem 0 0;">Fetching server identity...</p>
+        </div>
+        <div id="vps-status-badge" class="status-badge--vps">Loading...</div>
+      </header>
+
+      <!-- ── TAB: OVERVIEW ── -->
+      <section id="tab-overview" class="tab-content active">
+        <div class="vps-stats-grid">
+          <div class="vps-stat-card">
+            <h3>CPU Usage</h3>
+            <div class="value" id="stat-cpu">0%</div>
+            <div class="detail" id="stat-cpu-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Memory Usage</h3>
+            <div class="value" id="stat-mem">0%</div>
+            <div class="detail" id="stat-mem-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Disk Space</h3>
+            <div class="value" id="stat-disk">0%</div>
+            <div class="detail" id="stat-disk-detail">---</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Primary IP</h3>
+            <div class="value" id="stat-ip" style="font-family:monospace; font-size:1.25rem; color:var(--accent-dark); filter: blur(8px); cursor: pointer; transition: filter 0.3s ease; word-break: break-all;" onclick="this.style.filter='none'" title="Click to reveal">
+              ---.---.---.---</div>
+            <div class="detail">DDOS Protected</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Operating System</h3>
+            <div class="value" id="stat-os" style="font-size:1.1rem;">---</div>
+            <div class="detail">64-Bit Architecture</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Region</h3>
+            <div class="value" id="stat-region" style="font-size:1.1rem;">---</div>
+            <div class="detail">Low Latency Node</div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Protection</h3>
+            <div class="value" id="stat-protection-status" style="font-size:1.1rem;">DISABLED</div>
+            <div style="margin-top:0.5rem;">
+              <button class="btn btn--ghost" id="protection-toggle-btn" onclick="toggleProtection()"
+                style="padding:0.25rem 0.75rem; font-size:0.7rem; border-color:var(--border);">ENABLE LOCK</button>
+            </div>
+          </div>
+          <div class="vps-stat-card">
+            <h3>Uptime</h3>
+            <div class="value" id="stat-uptime-val">---</div>
+            <div class="detail" id="stat-status-text">---</div>
+          </div>
+        </div>
+
+        <div class="vps-card" style="margin-top: 2rem;">
+          <h2
+            style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+            Power Management</h2>
+          <div class="btn-group">
+            <button class="btn-vps btn-vps--start" onclick="power('start')">Start Server</button>
+            <button class="btn-vps btn-vps--restart" onclick="power('restart')">Restart</button>
+            <button class="btn-vps btn-vps--stop" onclick="power('stop')">Stop</button>
+          </div>
+        </div>
+
+        <div class="vps-card" style="margin-top: 2rem;">
+          <h2
+            style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase; letter-spacing:0.05em;">
+            Resource Load (24h)</h2>
+          <div class="graph-box">
+            <canvas id="overviewChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: ANALYTICS ── -->
+      <section id="tab-analytics" class="tab-content">
+        <div class="analytics-grid">
+          <div class="vps-card">
+            <h3>CPU Usage (%)</h3>
+            <div class="graph-box"><canvas id="chart-cpu"></canvas></div>
+          </div>
+          <div class="vps-card">
+            <h3>Memory Load (GB)</h3>
+            <div class="graph-box"><canvas id="chart-mem"></canvas></div>
+          </div>
+          <div class="vps-card">
+            <h3>Network (MB/s)</h3>
+            <div class="graph-box"><canvas id="chart-net"></canvas></div>
+          </div>
+          <div class="vps-card">
+            <h3>Disk I/O (MB/s)</h3>
+            <div class="graph-box"><canvas id="chart-disk"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: NETWORK ── -->
+      <section id="tab-network" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Network Allocation
+          </h2>
+          <div id="ip-list-container">
+            <div style="padding:2rem; text-align:center; color:var(--muted);">Fetching IP addresses...</div>
+          </div>
+        </div>
+
+        <div class="vps-card" style="margin-top:2rem;">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1.5rem; text-transform:uppercase;">Update Reverse DNS
+            (PTR)</h2>
+          <div class="vps-form-group">
+            <label>Target IP</label>
+            <select id="ptr-ip-select"></select>
+          </div>
+          <div class="vps-form-group">
+            <label>New Hostname</label>
+            <input type="text" id="ptr-hostname" placeholder="vps.example.com">
+          </div>
+          <button class="btn btn--primary" style="width:100%;" onclick="updatePTR()">Update PTR Record</button>
+        </div>
+      </section>
+
+      <!-- ── TAB: REINSTALL ── -->
+      <section id="tab-reinstall" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1rem; text-transform:uppercase; color:#ef4444;">
+            Dangerous Action: Reinstall OS</h2>
+          <p style="color:var(--muted); margin-bottom: 2rem;">Wipe all data and reinstall a clean operating system
+            template.</p>
+          <div class="vps-form-group">
+            <label>Choose OS Template</label>
+            <select id="os-select">
+              <option>Loading templates...</option>
+            </select>
+          </div>
+          <div class="vps-form-group">
+            <label>Server Hostname</label>
+            <input type="text" id="reinstall-hostname" placeholder="vps.host1top.com">
+          </div>
+          <button class="btn" style="width:100%; background:#ef4444; color:#fff;" onclick="reinstallOS()">Confirm
+            Reinstallation</button>
+        </div>
+      </section>
+
+      <!-- ── TAB: CONSOLE ── -->
+      <section id="tab-console" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1rem; text-transform:uppercase;">VNC Console</h2>
+          <p style="color:var(--muted); margin-bottom: 2rem;">Emergency access to your server display.</p>
+          <button class="btn btn--primary" onclick="loadVNC()" id="vnc-btn">Launch Console</button>
+          <div id="vnc-container" style="margin-top:2rem; display:none;">
+            <iframe id="vnc-frame" src=""></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: SETTINGS ── -->
+      <section id="tab-settings" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1rem; text-transform:uppercase;">Root Credentials</h2>
+          <p style="color:var(--muted); margin-bottom: 2rem;">Reset your administrative password. Server must be
+            offline.</p>
+          <div class="vps-form-group">
+            <label>New Root Password</label>
+            <input type="password" id="new-root-pass" placeholder="Enter secure password">
+          </div>
+          <button class="btn btn--primary" onclick="resetPassword()" style="width:100%;">Apply Password Change</button>
+        </div>
+      </section>
+
+      <!-- ── TAB: RENEW ── -->
+      <section id="tab-renew" class="tab-content">
+        <div class="vps-card">
+          <h2 style="font-size:1rem; font-weight:800; margin:0 0 1rem; text-transform:uppercase;">Subscription Renewal
+          </h2>
+          <p style="color:var(--muted); margin-bottom: 2rem;">Extend your VPS subscription instantly.</p>
+          <div class="vps-form-group">
+            <label>Extension Period</label>
+            <select id="renew-duration">
+              <option value="30">30 Days (Standard)</option>
+              <option value="90">90 Days (Quarterly - 5% Discount)</option>
+              <option value="365">365 Days (Yearly - 15% Discount)</option>
+            </select>
+          </div>
+          <button class="btn btn--primary" onclick="renewService()" style="width:100%;">Process Renewal</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+
+  <script src="header-loader.js"></script>
+  <script src="ui-improvements.js"></script>
+  <script>
+    let uuid = new URLSearchParams(window.location.search).get('uuid');
+    let serverData = null;
+    let overviewChart = null;
+    let cpuChart = null, memChart = null, netChart = null, diskChart = null;
+
+    // Global chart update helper
+    function updateChart(chart, val, label = null) {
+      if (!chart) return;
+      const now = label || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      if (chart.data.labels.length > 30) chart.data.labels.shift();
+      chart.data.labels.push(now);
+      
+      chart.data.datasets.forEach(ds => {
+        if (ds.data.length > 30) ds.data.shift();
+        ds.data.push(val);
+      });
+      chart.update('none');
+    }
+
+    async function api(path, method = 'GET', body = null) {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('No auth token found');
+        window.location.href = 'my-account.html';
+        return { error: 'Not authenticated' };
+      }
+      
+      const url = `/api/user/${path}`;
+      console.log(`[API Request] ${method} ${url}`);
+      
+      const options = {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      };
+      if (body) options.body = JSON.stringify(body);
+      
+      try {
+        const res = await fetch(url, options);
+        console.log(`[API Response] ${res.status} ${res.statusText}`);
+        
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('authToken');
+          window.location.href = 'my-account.html';
+          return { error: 'Session expired' };
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const payload = await res.json();
+          if (!res.ok) {
+            return {
+              error: payload?.error || payload?.response || `HTTP ${res.status}`,
+              state: payload?.state || 'error',
+              code: payload?.code || res.status,
+              data: payload?.data ?? null
+            };
+          }
+          return payload;
+        } else {
+          const text = await res.text();
+          console.error('Non-JSON response:', text);
+          return { error: 'Invalid server response' };
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        return { error: 'Failed to connect to backend' };
+      }
+    }
+
+    function switchTab(tabId) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      // Deactivate all sidebar links
+      document.querySelectorAll('.dash-sidebar a').forEach(n => n.classList.remove('active'));
+
+      // Show target tab
+      const tab = document.getElementById(`tab-${tabId}`);
+      if (tab) tab.classList.add('active');
+      
+      // Find and activate the correct sidebar link
+      const activeLink = Array.from(document.querySelectorAll('.dash-sidebar a')).find(a => a.getAttribute('onclick')?.includes(`'${tabId}'`));
+      if (activeLink) activeLink.classList.add('active');
+
+      // Load specific tab data
+      if (tabId === 'network') loadNetwork();
+      if (tabId === 'reinstall') loadOS();
+      if (tabId === 'analytics') loadDetailedAnalytics();
+    }
+
+    async function loadOverview() {
+      if (window.location.protocol === 'file:') {
+        alert('CRITICAL: You are opening this file directly. Please access it via http://localhost:3001/vps-panel.html?uuid=... instead.');
+        return;
+      }
+      if (!uuid) {
+        alert('No service identifier (UUID) found in the URL.');
+        window.location.href = 'my-services.html';
+        return;
+      }
+      try {
+        console.log('Fetching service details for:', uuid);
+        const res = await api(`service/${uuid}`);
+        if (res.error) {
+           console.error('API returned error:', res.error);
+           document.getElementById('vps-title').textContent = 'Error Loading Service';
+           document.getElementById('vps-subtitle').textContent = `Status: ${res.error}`;
+           alert('Failed to load service details: ' + res.error);
+           return;
+        }
+        if (res.service) {
+          serverData = res.service;
+          
+          // If the backend resolved a placeholder UUID to a real Ryze UUID, update the URL
+          if (serverData.service_uuid && serverData.service_uuid !== uuid) {
+            window.history.replaceState({}, '', `?uuid=${serverData.service_uuid}`);
+            uuid = serverData.service_uuid;
+          }
+          document.getElementById('vps-title').textContent = serverData.hostname || 'VPS Server';
+          document.getElementById('vps-subtitle').textContent = `UUID: ${uuid} • Plan: ${serverData.plan_name || 'Standard'}`;
+          document.getElementById('sidebar-hostname').textContent = serverData.hostname || 'My VPS';
+
+          // Try to load direct from Ryze API
+          try {
+            const ryzeRes = await api(`ryze/${uuid}/info`);
+            if (ryzeRes.data) {
+              const remote = ryzeRes.data;
+              if (remote.config) {
+                serverData.cpu = remote.config.cores || serverData.cpu;
+                serverData.memory = remote.config.memory || serverData.memory;
+              }
+              if (remote.node?.location) {
+                serverData.region = `${remote.node.location.city || ''}, ${remote.node.location.country || ''}`.trim().replace(/^,/, '');
+              }
+              if (remote.os?.display_name) {
+                serverData.os_name = remote.os.display_name;
+              }
+            }
+          } catch (e) {
+            console.warn('Could not load direct from Ryze API', e);
+          }
+
+          const cpu = serverData.cpu || 'N/A';
+          const mem = serverData.memory ? (serverData.memory / 1024).toFixed(1) : 'N/A';
+
+          document.getElementById('stat-cpu-detail').textContent = `${cpu} vCores Allocated`;
+          document.getElementById('stat-mem-detail').textContent = `${mem}GB RAM Allocated`;
+
+          // OS & Region
+          document.getElementById('stat-os').textContent = serverData.os_name || 'Generic Linux';
+          document.getElementById('stat-region').textContent = serverData.region || 'Netherlands , Eygelshoven';
+
+          // Protection
+          updateProtectionUI(serverData.protection_enabled);
+
+          loadStatus();
+          setTimeout(loadGraphs, 500); // Small delay to ensure DOM is ready
+          loadNetwork();
+        }
+      } catch (err) {
+        console.error('Overview error:', err);
+      }
+    }
+
+    function updateProtectionUI(enabled) {
+      const status = document.getElementById('stat-protection-status');
+      const btn = document.getElementById('protection-toggle-btn');
+
+      if (enabled) {
+        status.textContent = 'ENABLED';
+        status.style.color = '#166534';
+        btn.textContent = 'DISABLE LOCK';
+        btn.style.background = '#fecaca';
+        btn.style.color = '#991b1b';
+      } else {
+        status.textContent = 'DISABLED';
+        status.style.color = '#991b1b';
+        btn.textContent = 'ENABLE LOCK';
+        btn.style.background = 'var(--accent)';
+        btn.style.color = '#000';
+      }
+    }
+
+    async function toggleProtection() {
+      const newState = !serverData.protection_enabled;
+      try {
+        const res = await api(`ryze/${uuid}/protection`, 'POST', { enabled: newState });
+        if (res.message) {
+          serverData.protection_enabled = newState;
+          updateProtectionUI(newState);
+        }
+      } catch (e) { alert('Failed to update protection'); }
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await api(`ryze/${uuid}/status`);
+        if (res.state === 'pending' || res.code === 202) {
+          const badge = document.getElementById('vps-status-badge');
+          badge.textContent = 'ACTIVE';
+          badge.style.background = '#dcfce7';
+          badge.style.color = '#166534';
+          document.getElementById('stat-status-text').textContent = 'ACTIVE';
+          return;
+        }
+        if (res.data) {
+          const d = res.data;
+          const usage = d.usage || {};
+          const isRunning = d.status === 'running';
+
+          // Update text stats
+          const badge = document.getElementById('vps-status-badge');
+          badge.textContent = d.status || 'Unknown';
+          badge.style.background = isRunning ? '#dcfce7' : '#fee2e2';
+          badge.style.color = isRunning ? '#166534' : '#991b1b';
+
+          document.getElementById('stat-status-text').textContent = d.status?.toUpperCase() || '---';
+          if (d.uptime) {
+             const h = Math.floor(d.uptime / 3600);
+             const m = Math.floor((d.uptime % 3600) / 60);
+             document.getElementById('stat-uptime-val').textContent = `${h}h ${m}m`;
+          }
+
+          if (usage.cpu) document.getElementById('stat-cpu').textContent = `${usage.cpu.percentage || 0}%`;
+          if (usage.mem) {
+            document.getElementById('stat-mem').textContent = `${usage.mem.percentage || 0}%`;
+          }
+          if (usage.disk) {
+            document.getElementById('stat-disk').textContent = `${usage.disk.percentage || 0}%`;
+            document.getElementById('stat-disk-detail').textContent = `${usage.disk.absolute || '---'}`;
+          }
+
+          if (isRunning) {
+            updateChart(cpuChart, usage.cpu?.percentage || 0);
+            updateChart(memChart, (usage.mem?.percentage || 0) * (serverData?.memory || 1024) / 100 / 1024);
+            updateChart(netChart, usage.net?.in || 0); 
+            if (netChart && netChart.data.datasets[1]) {
+              netChart.data.datasets[1].data.push(usage.net?.out || 0);
+              if (netChart.data.datasets[1].data.length > 30) netChart.data.datasets[1].data.shift();
+            }
+            updateChart(diskChart, usage.disk_io?.read || 0);
+            if (diskChart && diskChart.data.datasets[1]) {
+              diskChart.data.datasets[1].data.push(usage.disk_io?.write || 0);
+              if (diskChart.data.datasets[1].data.length > 30) diskChart.data.datasets[1].data.shift();
+            }
+            updateChart(overviewChart, usage.cpu?.percentage || 0);
+          }
+        }
+      } catch (err) { console.error('Status error:', err); }
+    }
+
+    async function loadDetailedAnalytics() {
+      try {
+        console.log('Loading Detailed Analytics Charts...');
+        let res = await api(`ryze/${uuid}/history`);
+        let rawData = res.history || [];
+        
+        // If no local history, try to get some initial data from RRD
+        if (rawData.length === 0) {
+          try {
+            const rrd = await api(`ryze/${uuid}/rrddata`);
+            if (rrd.data && rrd.data.data) {
+              rawData = rrd.data.data.map((d, i) => ({
+                timestamp: new Date().getTime() - (rrd.data.data.length - i) * 60000,
+                cpu: d.cpu * 100,
+                mem: d.mem || 0, 
+                disk: d.disk || 0
+              }));
+            }
+          } catch (e) { console.warn('Detailed RRD data failed', e); }
+        }
+
+        let labels = [], cpuData = [], memData = [], netIn = [], netOut = [], diskR = [], diskW = [];
+
+        if (rawData.length === 0) {
+          labels = ['Waiting...'];
+          cpuData = [0]; memData = [0]; netIn = [0]; netOut = [0]; diskR = [0]; diskW = [0];
+        } else {
+          labels = rawData.map(d => new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          cpuData = rawData.map(d => d.cpu || 0);
+          memData = rawData.map(d => (d.mem || 0) / 1024);
+          netIn = rawData.map(d => 0); 
+          netOut = rawData.map(d => 0);
+          diskR = rawData.map(d => 0);
+          diskW = rawData.map(d => 0);
+        }
+
+        const gridColor = 'rgba(0,0,0,0.05)';
+        const tickColor = 'rgba(0,0,0,0.5)';
+
+        const createConfig = (label, data, color) => ({
+          type: 'line',
+          data: { labels: [...labels], datasets: [{ label, data: [...data], borderColor: color, backgroundColor: color + '15', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 3 }] },
+          options: { 
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 1000, easing: 'easeInOutQuad' },
+            plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, 
+            scales: { 
+              y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 10 } } }, 
+              x: { grid: { display: false }, ticks: { color: tickColor, font: { size: 10 }, maxTicksLimit: 10 } } 
+            },
+            interaction: { mode: 'nearest', axis: 'x', intersect: false }
+          }
+        });
+
+        if (cpuChart) cpuChart.destroy();
+        cpuChart = new Chart(document.getElementById('chart-cpu'), createConfig('CPU %', cpuData, '#2563eb'));
+        
+        if (memChart) memChart.destroy();
+        memChart = new Chart(document.getElementById('chart-mem'), createConfig('Mem GB', memData, '#db2777'));
+
+        if (netChart) netChart.destroy();
+        netChart = new Chart(document.getElementById('chart-net'), {
+          type: 'line',
+          data: {
+            labels: [...labels], datasets: [
+              { label: 'In', data: [...netIn], borderColor: '#059669', backgroundColor: '#05966915', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 },
+              { label: 'Out', data: [...netOut], borderColor: '#d97706', backgroundColor: '#d9770615', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 }
+            ]
+          },
+          options: { 
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: true, labels: { color: '#000', boxWidth: 12, font: { size: 10 } } } },
+            scales: { 
+              y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+              x: { grid: { display: false }, ticks: { color: tickColor } }
+            }
+          }
+        });
+
+        if (diskChart) diskChart.destroy();
+        diskChart = new Chart(document.getElementById('chart-disk'), {
+          type: 'line',
+          data: {
+            labels: [...labels], datasets: [
+              { label: 'Read', data: [...diskR], borderColor: '#7c3aed', backgroundColor: '#7c3aed15', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 },
+              { label: 'Write', data: [...diskW], borderColor: '#e11d48', backgroundColor: '#e11d4815', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 }
+            ]
+          },
+          options: { 
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: true, labels: { color: '#000', boxWidth: 12, font: { size: 10 } } } },
+            scales: { 
+              y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+              x: { grid: { display: false }, ticks: { color: tickColor } }
+            }
+          }
+        });
+      } catch (err) { console.error('Analytics error:', err); }
+    }
+
+    async function loadGraphs() {
+      try {
+        console.log('Loading Resource Load Chart...');
+        let res = await api(`ryze/${uuid}/history`);
+        let rawData = res.history || [];
+        let labels = [], cpuData = [];
+
+        if (rawData.length > 0) {
+          labels = rawData.map(d => new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          cpuData = rawData.map(d => d.cpu);
+        } else {
+          try {
+            const rrdRes = await api(`ryze/${uuid}/rrddata`);
+            if (rrdRes.data && rrdRes.data.data && rrdRes.data.data.length > 0) {
+              rawData = rrdRes.data.data;
+              labels = rawData.map((_, i) => `${i}m`);
+              cpuData = rawData.map(d => d.cpu * 100);
+            }
+          } catch (e) { console.warn('RRD data fallback failed', e); }
+        }
+
+        // Always initialize the chart, even if empty
+        if (labels.length === 0) {
+          labels = ['Waiting...'];
+          cpuData = [0];
+        }
+
+        const canvas = document.getElementById('overviewChart');
+        if (!canvas) {
+          console.error('overviewChart canvas not found!');
+          return;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (overviewChart) overviewChart.destroy();
+        
+        overviewChart = new Chart(ctx, {
+          type: 'line',
+          data: { 
+            labels, 
+            datasets: [{ 
+              label: 'CPU Usage %', 
+              data: cpuData, 
+              borderColor: '#b8fb3b', 
+              backgroundColor: '#b8fb3b11', 
+              fill: true, 
+              tension: 0.4, 
+              pointRadius: 0, 
+              borderWidth: 2 
+            }] 
+          },
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            scales: { 
+              y: { beginAtZero: true, max: 100, grid: { color: 'rgba(0,0,0,0.05)' } },
+              x: { grid: { display: false }, ticks: { display: true, maxTicksLimit: 6 } }
+            }, 
+            plugins: { legend: { display: false } } 
+            }
+        });
+        console.log('Resource Load Chart initialized.');
+      } catch (e) { console.error('Graph error:', e); }
+    }
+
+    async function power(action) {
+      const res = await api(`ryze/${uuid}/power`, 'POST', { action });
+      alert(res.response === 'success' ? `Action ${action} sent!` : 'Error: ' + res.error);
+      setTimeout(loadStatus, 2000);
+    }
+
+    async function loadNetwork() {
+      const res = await api(`ryze/${uuid}/ipaddresses`);
+      if (res.state === 'pending' || res.code === 202) {
+        document.getElementById('stat-ip').textContent = 'Assigning IP...';
+        document.getElementById('ip-list-container').innerHTML = '<div style="padding:1rem; color:var(--muted);">IP network configuration in progress...</div>';
+        return;
+      }
+      if (res.data) {
+        const container = document.getElementById('ip-list-container');
+        const select = document.getElementById('ptr-ip-select');
+        let html = ''; select.innerHTML = '';
+
+        if (res.data.ipv4_addresses && res.data.ipv4_addresses.length > 0) {
+          document.getElementById('stat-ip').textContent = res.data.ipv4_addresses[0].ip;
+        }
+
+        res.data.ipv4_addresses.forEach(ip => {
+          html += `<div style="display:flex; justify:space-between; padding:1rem; border-bottom:1px solid var(--border);"><div><strong>IPv4</strong><br/><small>${ip.rdns}</small></div><div style="font-family:monospace;">${ip.ip}</div></div>`;
+          select.innerHTML += `<option value="${ip.ip}">${ip.ip}</option>`;
+        });
+        container.innerHTML = html;
+      } else if (res.error) {
+        document.getElementById('ip-list-container').innerHTML = `<div style="padding:1rem; color:#b91c1c;">${res.error}</div>`;
+      }
+    }
+
+    async function loadOS() {
+      const type = serverData?.service_type || 'VPS';
+      const res = await api(`ryze/os?type=${type}`);
+      if (res.data) {
+        document.getElementById('os-select').innerHTML = res.data.map(os => {
+          const dName = os.display_name || os.displayname || os.osDisplayName || os.name;
+          return `<option value="${os.name}">${dName}</option>`;
+        }).join('');
+      }
+    }
+
+    async function renewService() {
+      const duration = document.getElementById('renew-duration').value;
+      const res = await api(`ryze/${uuid}/renew`, 'POST', { duration: parseInt(duration) });
+      alert(res.response === 'success' ? `Renewed for ${duration} days` : 'Error: ' + res.error);
+    }
+
+    async function resetPassword() {
+      const password = document.getElementById('new-root-pass').value;
+      const res = await api(`ryze/${uuid}/password`, 'POST', { password });
+      alert(res.response === 'success' ? 'Password reset successfully' : 'Error: ' + res.error);
+    }
+
+    async function loadVNC() {
+      const res = await api(`ryze/${uuid}/vnc`);
+      if (res.data?.link) {
+        document.getElementById('vnc-container').style.display = 'block';
+        document.getElementById('vnc-frame').src = res.data.link;
+        document.getElementById('vnc-btn').style.display = 'none';
+      } else alert('VNC failed');
+    }
+
+    async function reinstallOS() {
+      const os = document.getElementById('os-select').value;
+      const hostname = document.getElementById('reinstall-hostname').value;
+      if (!confirm(`Are you sure you want to reinstall to ${os}? ALL DATA WILL BE ERASED.`)) return;
+      
+      const res = await api(`ryze/${uuid}/reinstall`, 'POST', { os, hostname });
+      if (res.response === 'success' || res.message) {
+        alert('Reinstallation started! Please wait 5-10 minutes.');
+        switchTab('overview');
+      } else {
+        alert('Error: ' + (res.error || 'Failed to start reinstall'));
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('Panel Initializing...');
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        window.location.href = 'my-account.html';
+        return;
+      }
+      
+      try {
+        await loadOverview();
+        console.log('Overview loaded');
+        setInterval(loadStatus, 15000);
+      } catch (e) {
+        console.error('Initialization failed:', e);
+        alert('Critical error during initialization. Please refresh the page.');
+      }
+    });
+  </script>
+</body>
+
+</html>
