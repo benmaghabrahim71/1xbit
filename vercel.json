@@ -1,9 +1,40 @@
 {
   "version": 2,
-  "rewrites": [
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
+  "public": true,
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "src": "^/api/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "^/admin(?:/.*)?$",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "^/client(?:/.*)?$",
+      "dest": "/client.html"
+    },
+    {
+      "src": "^/about(?:/.*)?$",
+      "dest": "/about.html"
+    },
+    {
+      "src": "^/contact(?:/.*)?$",
+      "dest": "/contact.html"
+    },
+    {
+      "src": "^/(?!api/)([^.]*?)$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)\\.(js|css|json|png|jpg|jpeg|gif|svg|ico|webp)$",
+      "dest": "/$1.$2"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }

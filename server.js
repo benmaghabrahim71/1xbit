@@ -6057,4 +6057,9 @@ app.post('/api/admin/assign-service', adminAuth, async (req, res) => {
   }
 });
 
+// Catch-all route: serve index.html for any unmatched routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 module.exports = app;

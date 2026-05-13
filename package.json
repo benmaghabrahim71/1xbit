@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "echo 'Build complete'",
     "test": "node --test tests/unit/*.test.js",
     "test:unit": "node --test tests/unit/*.test.js",
     "test:ptero:integration": "node --test tests/integration/*.test.js",
